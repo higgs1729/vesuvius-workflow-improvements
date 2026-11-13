@@ -1,0 +1,219 @@
+{
+  "source_git_blob": "3c0d4250ea484c616f4f8e2c260f7ce2a07f99d6",
+  "selection_from_logs": {
+    "baseline-observe": {
+      "complete": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          7356,
+          2272,
+          128,
+          128
+        ],
+        "selected_pixels": 16384
+      },
+      "omitted": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          13600,
+          3440
+        ],
+        "selected_pixels": 46784000
+      },
+      "zero": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          13600,
+          3440
+        ],
+        "selected_pixels": 46784000
+      },
+      "default-origin": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          128,
+          128
+        ],
+        "selected_pixels": 16384
+      },
+      "negative-origin": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          112,
+          120
+        ],
+        "selected_pixels": 13440
+      },
+      "auto": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          19,
+          19,
+          13561,
+          3401
+        ],
+        "selected_pixels": 46120961
+      },
+      "missing-height": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          13600,
+          3440
+        ],
+        "selected_pixels": 46784000
+      }
+    },
+    "guard-observe": {
+      "complete": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          7356,
+          2272,
+          128,
+          128
+        ],
+        "selected_pixels": 16384
+      },
+      "omitted": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          13600,
+          3440
+        ],
+        "selected_pixels": 46784000
+      },
+      "zero": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          13600,
+          3440
+        ],
+        "selected_pixels": 46784000
+      },
+      "default-origin": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          128,
+          128
+        ],
+        "selected_pixels": 16384
+      },
+      "negative-origin": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          0,
+          0,
+          112,
+          120
+        ],
+        "selected_pixels": 13440
+      },
+      "auto": {
+        "canvas": [
+          13600,
+          3440
+        ],
+        "crop": [
+          19,
+          19,
+          13561,
+          3401
+        ],
+        "selected_pixels": 46120961
+      }
+    }
+  },
+  "selected_area": {
+    "full_pixels_per_layer": 46784000,
+    "manual_pixels_per_layer": 16384,
+    "excess_selected_pixels_per_layer": 46767616,
+    "full_to_manual_area_ratio": 2855.46875
+  },
+  "cli_replay_cases": 18,
+  "invalid_cases_rejected_before_open": [
+    "missing-height",
+    "missing-width",
+    "negative-width",
+    "negative-height",
+    "zero-height",
+    "position-only",
+    "position-with-explicit-zero-sizes",
+    "auto-with-partial",
+    "tiff-invalid"
+  ],
+  "three_tiff_pairs": [
+    {
+      "sha256": "d3bb7185c729ea42c2d7a7305b618fe64b712193938a9fa5ffccba981c094872",
+      "decoded_pixel_sha256": "b5c20405b76746640f03eb85d2e78cc774e8e4f47932db232b85c33361b28cf6",
+      "pixels": 16384
+    },
+    {
+      "sha256": "3d071a7ca794549900794968802f024d66305fb86828fd92a6b188887eb1bcc5",
+      "decoded_pixel_sha256": "6274abde51836fd105e9259812988684bdffb7e4c812a064349d334351630481",
+      "pixels": 16384
+    },
+    {
+      "sha256": "54ec29da62d9a1d8f260ef561d16b2f4c3d56a70d1f49ead6b3352f8578f6ef4",
+      "decoded_pixel_sha256": "ff89fe4ab6c3733c6a02e6f7ef06e898a5068889446fe02fd641a477a34c41fb",
+      "pixels": 16384
+    }
+  ],
+  "new_ct_download_bytes": 0,
+  "additional_cloud_cost_jpy": 0,
+  "limitations": [
+    "No full-canvas render or measured time, transfer or monetary savings.",
+    "No human review, external adoption or reading improvement established."
+  ]
+}

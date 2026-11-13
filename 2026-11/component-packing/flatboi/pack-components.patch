@@ -1,0 +1,152 @@
+--- a/volume-cartographer/libs/flatboi/flatboi.cpp
++++ b/volume-cartographer/libs/flatboi/flatboi.cpp
+@@ -2,6 +2,7 @@
+ #include <igl/slim.h>
+ #include <igl/MappingEnergyType.h>
+ #include <igl/boundary_loop.h>
++#include <igl/vertex_components.h>
+ 
+ #include <Eigen/Core>
+ #include <Eigen/Geometry>
+@@ -892,7 +893,72 @@
+   double conv_tol = 0.0;
+   float keep_percent = 100.0f;
+   bool inpaint = false;
++  bool pack_components = false;
+ };
++
++// Translate each connected piece into a separate horizontal interval.
++static void packComponents(const vc::meshing::GridMesh& mesh,
++                           const std::vector<vc::meshing::UvFace>& faces,
++                           const std::vector<uint8_t>& uv_valid, double gap,
++                           std::vector<cv::Vec2f>& uvs)
++{
++  if (faces.empty()) return;
++
++  Eigen::MatrixXi F(mesh.faces.size(), 3);
++  for (std::size_t i = 0; i < mesh.faces.size(); ++i)
++    F.row(i) << mesh.faces[i][0], mesh.faces[i][1], mesh.faces[i][2];
++  Eigen::VectorXi labels;
++  igl::vertex_components(F, labels);
++
++  const double inf = std::numeric_limits<double>::infinity();
++  struct Component {
++    int vertices = 0;
++    cv::Vec2d lower;
++    double upper_x;
++    cv::Vec2d shift{0.0, 0.0};
++  };
++  std::vector<Component> components(labels.maxCoeff() + 1, {0, {inf, inf}, -inf});
++  for (int label : labels) ++components[label].vertices;
++
++  const auto finite = [](const cv::Vec2f& uv) {
++    return std::isfinite(uv[0]) && std::isfinite(uv[1]);
++  };
++  // Only corners of faces sent to the rasterizer can define the output bounds.
++  for (const auto& face : faces) {
++    if (!finite(uvs[face.vt[0]]) || !finite(uvs[face.vt[1]]) || !finite(uvs[face.vt[2]]))
++      continue;
++    auto& component = components[labels[face.v[0]]];
++    for (int vertex : face.vt) {
++      const cv::Vec2d uv = uvs[vertex];
++      component.lower[0] = std::min(component.lower[0], uv[0]);
++      component.lower[1] = std::min(component.lower[1], uv[1]);
++      component.upper_x = std::max(component.upper_x, uv[0]);
++    }
++  }
++
++  std::vector<int> order;
++  for (int label = 0; label < static_cast<int>(components.size()); ++label)
++    if (components[label].lower[0] != inf) order.push_back(label);
++  if (order.size() < 2) return;
++  // libigl assigns IDs in first-vertex order. Preserve that order for equal sizes.
++  std::stable_sort(order.begin(), order.end(), [&](int a, int b) {
++    return components[a].vertices > components[b].vertices;
++  });
++  double cursor = 0.0;
++  for (int label : order) {
++    auto& component = components[label];
++    component.shift = {cursor - component.lower[0], -component.lower[1]};
++    cursor += component.upper_x - component.lower[0] + gap;
++  }
++  for (std::size_t i = 0; i < uvs.size(); ++i) {
++    const auto& component = components[labels[i]];
++    if (component.lower[0] != inf && uv_valid[i] && finite(uvs[i])) {
++      uvs[i][0] = float(double(uvs[i][0]) + component.shift[0]);
++      uvs[i][1] = float(double(uvs[i][1]) + component.shift[1]);
++    }
++  }
++}
++
+ 
+ // The flattened surface, or nullptr when SLIM diverged. Energies and heatmaps
+ // are named after `report_path`.
+@@ -976,7 +1042,12 @@
+ 
+   // Rasterized at the source's sampling density, as vc_obj2tifxyz --tifxyz-source does.
+   vc::meshing::UvGridRasterizer rasterizer;
+-  if (scale[0] > 0.f && scale[1] > 0.f) rasterizer.setSrcScale(scale);
++  const bool has_src_scale = scale[0] > 0.f && scale[1] > 0.f;
++  if (has_src_scale) rasterizer.setSrcScale(scale);
++  if (opt.pack_components) {
++    const double gap = has_src_scale && std::isfinite(scale[0]) ? 2.0 / scale[0] : 2.0;
++    packComponents(fine_mesh, faces, uv_valid, gap, uvs);
++  }
+   rasterizer.setMesh(fine_mesh.positions, std::move(uvs), std::move(faces));
+   rasterizer.determineGridDimensions(1.0f);
+   std::unique_ptr<QuadSurface> flat(rasterizer.createQuadSurface(1.0f));
+@@ -987,7 +1058,7 @@
+ static nlohmann::json parameters(const Options& opt)
+ {
+   return {{"iterations", opt.iters}, {"energy", opt.energy_label}, {"tolerance", opt.conv_tol},
+-          {"keep_percent", opt.keep_percent}, {"inpaint", opt.inpaint}};
++          {"keep_percent", opt.keep_percent}, {"inpaint", opt.inpaint}, {"pack_components", opt.pack_components}};
+ }
+ 
+ // A stored surface into a new surface object; its reports are published as the
+@@ -1052,21 +1123,24 @@
+   double conv_tol = 0.0;
+ 
+   auto print_usage = [&]() {
+-    std::cerr << "Usage: " << argv[0] << " <tifxyz-dir> --output=<dir> [--keep=<p>] [--inpaint] [iters=50] [energy] [--tol=<x>]\n"
++    std::cerr << "Usage: " << argv[0] << " <tifxyz-dir> --output=<dir> [--keep=<p>] [--inpaint] [--pack-components] [iters=50] [energy] [--tol=<x>]\n"
+               << "       " << argv[0] << " --store <store> --surface <uuid> [--name <name>] [--tag <tag>]...\n"
+-              << "                [--volume-uuid <id>] [--keep=<p>] [--inpaint] [iters=50] [energy] [--tol=<x>]\n"
++              << "                [--volume-uuid <id>] [--keep=<p>] [--inpaint] [--pack-components] [iters=50] [energy] [--tol=<x>]\n"
+               << "  energy (optional): symmetric_dirichlet (default) or conformal\n"
+               << "  --tol=<x>         relative-energy early-stop threshold (0 disables, default)\n"
+               << "  a tifxyz surface (directory or stored) is flattened into a new surface: a tifxyz\n"
+               << "  directory at --output, or a stored surface (prints surface_uuid:);\n"
+               << "  --keep=<p> runs SLIM on ~p percent of the grid points and lifts the UVs to the\n"
+-              << "  full grid, --inpaint fills interior holes first\n";
++              << "  full grid, --inpaint fills interior holes first\n"
++              << "  --pack-components arranges disconnected pieces side by side before rasterizing.\n"
++              << "  This can change the layout and output width. Overlaps within pieces remain.\n";
+   };
+ 
+   std::optional<StoreToolOptions> store_output;
+   std::string tifxyz_output;
+   float keep_percent = 100.0f;
+   bool inpaint = false;
++  bool pack_components = false;
+   std::vector<std::string> positional;
+   try {
+     std::vector<std::string> args(argv + 1, argv + argc);
+@@ -1084,6 +1158,8 @@
+         if (!(keep_percent > 0.0f && keep_percent <= 100.0f)) throw std::invalid_argument("--keep must be in (0, 100]");
+       } else if (a == "--inpaint") {
+         inpaint = true;
++      } else if (a == "--pack-components") {
++        pack_components = true;
+       } else {
+         positional.push_back(std::move(a));
+       }
+@@ -1143,7 +1219,7 @@
+   std::ios::sync_with_stdio(false);
+   std::cout.setf(std::ios::unitbuf); // line-buffered: flush on '\n'
+ 
+-  const surface_mode::Options options{iters, energy, energy_label, conv_tol, keep_percent, inpaint};
++  const surface_mode::Options options{iters, energy, energy_label, conv_tol, keep_percent, inpaint, pack_components};
+   try {
+     return store_mode ? surface_mode::run_store(*store_output, store_output->surfaces.front(), options)
+                       : surface_mode::run_tifxyz(input_path, tifxyz_output, options);

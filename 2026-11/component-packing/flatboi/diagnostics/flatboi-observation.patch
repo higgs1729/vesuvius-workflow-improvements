@@ -1,0 +1,55 @@
+--- a/volume-cartographer/libs/flatboi/flatboi.cpp
++++ b/volume-cartographer/libs/flatboi/flatboi.cpp
+@@ -1044,10 +1044,52 @@
+   vc::meshing::UvGridRasterizer rasterizer;
+   const bool has_src_scale = scale[0] > 0.f && scale[1] > 0.f;
+   if (has_src_scale) rasterizer.setSrcScale(scale);
++  std::vector<cv::Vec2f> prepack_uvs;
++  if (opt.pack_components && std::getenv("FLATBOI_DIAGNOSTICS")) prepack_uvs = uvs;
+   if (opt.pack_components) {
+     const double gap = has_src_scale && std::isfinite(scale[0]) ? 2.0 / scale[0] : 2.0;
+     packComponents(fine_mesh, faces, uv_valid, gap, uvs);
+   }
++
++  // [DEBUG-r005] Observation only: record actual SLIM and lifted UVs before rasterization.
++  if (std::getenv("FLATBOI_DIAGNOSTICS")) {
++    nlohmann::json diagnostic;
++    diagnostic["stride"] = stride;
++    diagnostic["full_shape_yx"] = {full.rows, full.cols};
++    diagnostic["coarse_shape_yx"] = {coarse.rows, coarse.cols};
++    diagnostic["scale_xy"] = {scale[0], scale[1]};
++    diagnostic["coarse_cells_yx"] = nlohmann::json::array();
++    diagnostic["coarse_uvs"] = nlohmann::json::array();
++    for (std::size_t i = 0; i < coarse_mesh.cells.size(); ++i) {
++      diagnostic["coarse_cells_yx"].push_back({coarse_mesh.cells[i][0], coarse_mesh.cells[i][1]});
++      diagnostic["coarse_uvs"].push_back({uv_out(i, 0), uv_out(i, 1)});
++    }
++    diagnostic["fine_cells_yx"] = nlohmann::json::array();
++    diagnostic["fine_uvs"] = nlohmann::json::array();
++    diagnostic["fine_valid"] = uv_valid;
++    diagnostic["fine_positions"] = nlohmann::json::array();
++    diagnostic["prepack_uvs"] = nlohmann::json::array();
++    for (std::size_t i = 0; i < fine_mesh.cells.size(); ++i) {
++      diagnostic["fine_cells_yx"].push_back({fine_mesh.cells[i][0], fine_mesh.cells[i][1]});
++      if (uv_valid[i]) diagnostic["fine_uvs"].push_back({uvs[i][0], uvs[i][1]});
++      else diagnostic["fine_uvs"].push_back(nullptr);
++      const auto& xyz = fine_mesh.positions[i];
++      diagnostic["fine_positions"].push_back({xyz[0], xyz[1], xyz[2]});
++      if (!prepack_uvs.empty()) {
++        if (uv_valid[i]) diagnostic["prepack_uvs"].push_back({prepack_uvs[i][0], prepack_uvs[i][1]});
++        else diagnostic["prepack_uvs"].push_back(nullptr);
++      }
++    }
++    diagnostic["fine_faces"] = nlohmann::json::array();
++    for (const auto& f : fine_mesh.faces)
++      diagnostic["fine_faces"].push_back({f[0], f[1], f[2]});
++    const auto path = report_path.string() + "_uv_diagnostics.json";
++    std::ofstream stream(path);
++    stream << diagnostic.dump();
++    if (!stream) throw std::runtime_error("[DEBUG-r005] Failed to write UV diagnostics");
++    std::cerr << "[DEBUG-r005] UV diagnostics saved to " << path << '\n';
++  }
++
+   rasterizer.setMesh(fine_mesh.positions, std::move(uvs), std::move(faces));
+   rasterizer.determineGridDimensions(1.0f);
+   std::unique_ptr<QuadSurface> flat(rasterizer.createQuadSurface(1.0f));

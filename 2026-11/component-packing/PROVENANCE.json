@@ -1,0 +1,16 @@
+{
+  "status": "prepared for review; not published or submitted",
+  "root_github_account": "higgs1729",
+  "original_product_snapshot": "flatboi/MANIFEST.json",
+  "ct_trial_report_sha256": "3c436ffc4e21da9860c3471a2aa4cb8f4f2d7f079edbf2139db8639c17f43e7e",
+  "ct_trial_manifest_sha256": "4bbf67f453cdc96b3e70da51aeeb0f4f2a79315a232991532c3eac1000b8d1b6",
+  "ct_independent_report_sha256": "af7b618fa3e7b18139f19b552eadb6307ee849af08d1b193df5d3cd6fe589395",
+  "ct_independent_manifest_sha256": "4638a9a99342c42b83d4d0e45df14e9c342a2dc35976db92e6c334eb22c09b9b",
+  "ct_independent_result_sha256": "0994a6621e62c64ae65fceaca5bcb44fcab7e299b881aa4a832ce409abced232",
+  "ct_observation_binary_sha256": "7b4232a2356deca215ceaa8d072a7673023db8a5c2bfd90959dcb6c233ee9927",
+  "ct_numerical_scope": "One geometry-selected edge; component2 correspondence/segmentation and readability unresolved.",
+  "new_paid_compute_usd": 0,
+  "human_use_or_review_claimed": false,
+  "data_terms_checked_at": "2026-11-12",
+  "data_terms_source": "https://scrollprize.org/data"
+}

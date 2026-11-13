@@ -1,0 +1,34 @@
+{
+  "check_cli.py": {
+    "bytes": 4028,
+    "sha256": "b62e4b0d5d117a6b073f60eb65e8d47089110c42ec9304c0831a4fb956985c39"
+  },
+  "crop-guard.patch": {
+    "bytes": 2556,
+    "sha256": "91d92e7cd12b975c4cc8be16d7580ef55d3548a659be772c2cd92bd786a61ee7"
+  },
+  "LICENSE-original-contributions.txt": {
+    "bytes": 1066,
+    "sha256": "d4b1658a0688e4c2ed8c033cecbf891fc75d137bfd5dc96d7a27ffec19445cc5"
+  },
+  "LICENSE-volume-cartographer.txt": {
+    "bytes": 35158,
+    "sha256": "7243392431c702199701a29f34e84530f2884a4fe37aba54c0ee2ccd361d052b"
+  },
+  "PROVENANCE.json": {
+    "bytes": 875,
+    "sha256": "61e7e938b098ef9b753a40b66187dc31785debdb442a0daa770fe4bc5a40d9eb"
+  },
+  "README.md": {
+    "bytes": 3830,
+    "sha256": "0c450ff046705759bfd11d5c9582188c64e11371afd625ff0e008f5504aa02d9"
+  },
+  "RESULTS.json": {
+    "bytes": 4570,
+    "sha256": "a7823bf4ac43eeb8050416a9ac62d22cf37826fcb29929641566fe7720f246f8"
+  },
+  "VERIFICATION.md": {
+    "bytes": 2196,
+    "sha256": "ebed19cff50e2e925573799bd9a48f85eaa5e430b8e160d372a48668fc54087c"
+  }
+}

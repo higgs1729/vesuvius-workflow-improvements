@@ -1,0 +1,366 @@
+{
+  "rule": "Before CT, filter known 4-neighbor edges for exact original face IDs on both sides in after; center each 64-pixel crop using source grid transform; after owner is nearest XYZ same-face sample (ties row-major). Require pure 4-vertex support for both before sides and both after targets, a full before patch containing both components, and no more than 32 estimated chunks. Rank minimum pure count descending, pair-mixed support descending, estimated chunks ascending, unrelated before pure area ascending, then lexicographic endpoints. Anchors are two exact original face centroids and a third centroid from the after crops maximizing triangle area.",
+  "edges_evaluated": 106,
+  "eligible_candidates": 19,
+  "selected": {
+    "before_edge_grid_yx": [
+      [
+        120,
+        373
+      ],
+      [
+        121,
+        373
+      ]
+    ],
+    "original_face_ids": [
+      53045,
+      63364
+    ],
+    "components": [
+      0,
+      2
+    ],
+    "after_grid_yx": [
+      [
+        120,
+        371
+      ],
+      [
+        32,
+        431
+      ]
+    ],
+    "pure_full_quad_proxy_pixels": [
+      1408,
+      1408,
+      2048,
+      1808
+    ],
+    "before_mixed_full_quad_proxy_pixels": 1280,
+    "before_pair_mixed_proxy_pixels": 1280,
+    "estimated_ct_chunks_before_sections": 16,
+    "rank_ascending": [
+      -1408,
+      -1280,
+      16,
+      0,
+      120,
+      373,
+      121,
+      373
+    ]
+  },
+  "rois": [
+    {
+      "id": "before",
+      "input": "first-trace-off01",
+      "crop_xywh": [
+        7428,
+        2378,
+        64,
+        64
+      ]
+    },
+    {
+      "id": "after-a",
+      "input": "first-trace-on01",
+      "crop_xywh": [
+        7388,
+        2368,
+        64,
+        64
+      ],
+      "expected_original_component": 0
+    },
+    {
+      "id": "after-b",
+      "input": "first-trace-on01",
+      "crop_xywh": [
+        8588,
+        608,
+        64,
+        64
+      ],
+      "expected_original_component": 2
+    }
+  ],
+  "face_mapping": [
+    {
+      "original_face_id": 53045,
+      "original_component": 0,
+      "original_vertex_ids": [
+        27991,
+        27623,
+        27992
+      ],
+      "original_vertices_xyz": [
+        [
+          3338.69140625,
+          3020.085693359375,
+          2446.726806640625
+        ],
+        [
+          3342.972412109375,
+          3028.0517578125,
+          2470.3408203125
+        ],
+        [
+          3345.936767578125,
+          3038.5458984375,
+          2448.35205078125
+        ]
+      ],
+      "original_vertices_input_yx": [
+        [
+          102,
+          374
+        ],
+        [
+          101,
+          375
+        ],
+        [
+          102,
+          375
+        ]
+      ],
+      "before_uv_xy": [
+        [
+          7450.28076171875,
+          2221.755615234375
+        ],
+        [
+          7463.796875,
+          2200.137939453125
+        ],
+        [
+          7470.2392578125,
+          2223.689697265625
+        ]
+      ],
+      "after_uv_xy": [
+        [
+          7408.44873046875,
+          2410.362548828125
+        ],
+        [
+          7421.96484375,
+          2388.744873046875
+        ],
+        [
+          7428.4072265625,
+          2412.296630859375
+        ]
+      ],
+      "before_raster_owner": {
+        "grid_yx": [
+          120,
+          373
+        ],
+        "output_xyz": [
+          3341.1962890625,
+          3024.778076171875,
+          2460.304931640625
+        ],
+        "owner_original_face_id": 53045,
+        "original_component": 0
+      },
+      "after_raster_owner": {
+        "grid_yx": [
+          120,
+          371
+        ],
+        "output_xyz": [
+          3343.6689453125,
+          3030.991943359375,
+          2461.52197265625
+        ],
+        "owner_original_face_id": 53045,
+        "original_component": 0
+      }
+    },
+    {
+      "original_face_id": 63364,
+      "original_component": 2,
+      "original_vertex_ids": [
+        33483,
+        33482,
+        33484
+      ],
+      "original_vertices_xyz": [
+        [
+          3437.733642578125,
+          2948.929931640625,
+          2177.62158203125
+        ],
+        [
+          3444.701416015625,
+          2950.541259765625,
+          2198.277587890625
+        ],
+        [
+          3454.7412109375,
+          2967.11328125,
+          2196.639892578125
+        ]
+      ],
+      "original_vertices_input_yx": [
+        [
+          115,
+          362
+        ],
+        [
+          114,
+          362
+        ],
+        [
+          114,
+          363
+        ]
+      ],
+      "before_uv_xy": [
+        [
+          7453.228515625,
+          2235.63818359375
+        ],
+        [
+          7454.20849609375,
+          2213.795166015625
+        ],
+        [
+          7473.42431640625,
+          2211.70556640625
+        ]
+      ],
+      "after_uv_xy": [
+        [
+          8612.806640625,
+          659.875
+        ],
+        [
+          8613.787109375,
+          638.031982421875
+        ],
+        [
+          8633.0029296875,
+          635.9423828125
+        ]
+      ],
+      "before_raster_owner": {
+        "grid_yx": [
+          121,
+          373
+        ],
+        "output_xyz": [
+          3442.03173828125,
+          2953.386474609375,
+          2182.73291015625
+        ],
+        "owner_original_face_id": 63364,
+        "original_component": 2
+      },
+      "after_raster_owner": {
+        "grid_yx": [
+          32,
+          431
+        ],
+        "output_xyz": [
+          3449.146484375,
+          2959.012451171875,
+          2195.053955078125
+        ],
+        "owner_original_face_id": 63364,
+        "original_component": 2
+      }
+    }
+  ],
+  "anchors": [
+    {
+      "original_face_id": 53045,
+      "original_component": 0,
+      "centroid_xyz": [
+        3342.5335286458335,
+        3028.8944498697915,
+        2455.139892578125
+      ],
+      "normal_xyz": [
+        -0.9312419910968487,
+        0.3613680401847579,
+        0.04692007620415802
+      ],
+      "plane_axis_xyz": 2,
+      "plane_index": 2455,
+      "section_bounds_xyz_inclusive": [
+        [
+          3312,
+          2998,
+          2455
+        ],
+        [
+          3372,
+          3058,
+          2455
+        ]
+      ]
+    },
+    {
+      "original_face_id": 63364,
+      "original_component": 2,
+      "centroid_xyz": [
+        3445.7254231770835,
+        2955.5281575520835,
+        2190.8463541666665
+      ],
+      "normal_xyz": [
+        -0.8205661166448764,
+        0.5204635914155313,
+        0.2361967362712573
+      ],
+      "plane_axis_xyz": 2,
+      "plane_index": 2191,
+      "section_bounds_xyz_inclusive": [
+        [
+          3415,
+          2925,
+          2191
+        ],
+        [
+          3475,
+          2985,
+          2191
+        ]
+      ]
+    },
+    {
+      "original_face_id": 64784,
+      "original_component": 2,
+      "centroid_xyz": [
+        3436.54052734375,
+        2990.997314453125,
+        2152.3148600260415
+      ],
+      "normal_xyz": [
+        -0.9128544997330773,
+        -0.16312443589069436,
+        0.37428208711133387
+      ],
+      "plane_axis_xyz": 1,
+      "plane_index": 2991,
+      "section_bounds_xyz_inclusive": [
+        [
+          3406,
+          2991,
+          2122
+        ],
+        [
+          3466,
+          2991,
+          2182
+        ]
+      ]
+    }
+  ],
+  "before_endpoint_distance_vox": 303.8268737792969,
+  "candidate_ledger_sha256": "c6d77097e0ba659e1a0f9d4f73980fc5281ec95a2b23149024179d7010979014"
+}

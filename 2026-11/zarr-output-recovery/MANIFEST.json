@@ -1,0 +1,46 @@
+{
+  "LICENSE-original-contributions.txt": {
+    "bytes": 1066,
+    "sha256": "d4b1658a0688e4c2ed8c033cecbf891fc75d137bfd5dc96d7a27ffec19445cc5"
+  },
+  "LICENSE-villa-root.txt": {
+    "bytes": 1075,
+    "sha256": "87070eec603117b5365e2172999e81b08890aef91c1673383cf9779ee9c89976"
+  },
+  "LICENSE-volume-cartographer.txt": {
+    "bytes": 35158,
+    "sha256": "7243392431c702199701a29f34e84530f2884a4fe37aba54c0ee2ccd361d052b"
+  },
+  "PROVENANCE.json": {
+    "bytes": 2202,
+    "sha256": "5086e7635290b85256c51629e1b4ed9013b30a237fba4ec325a1303e93c6c983"
+  },
+  "pyramid-metadata.patch": {
+    "bytes": 1842,
+    "sha256": "cca4821117c279939113e773c96c56c19d9d9b42c36bc8f1db1c531af63b9146"
+  },
+  "README.md": {
+    "bytes": 7318,
+    "sha256": "5e2af76f04255ee4fa628793108a4922a1b09f7db09266674badb055009e1123"
+  },
+  "RESULTS.json": {
+    "bytes": 3400,
+    "sha256": "e4661bebfa1461eeb078b160139677ed110901a37242ae97219f28b7df8362f6"
+  },
+  "resume-pyramid-python.patch": {
+    "bytes": 5989,
+    "sha256": "e514365be446b64f7c847f17021aa1b5d8158f325ad60b7802dd5484d19046ee"
+  },
+  "resume-pyramid.patch": {
+    "bytes": 4281,
+    "sha256": "92a703f53ca15787c2912ab9dbd9af18b98176b126b9a7aec9d3c77b2f81556d"
+  },
+  "VERIFICATION.md": {
+    "bytes": 5795,
+    "sha256": "8b8fab3e11f6b38084c81233c4c5a051009e5bbbc23ff7c7794ab16087a8a2f2"
+  },
+  "verify_python.py": {
+    "bytes": 6939,
+    "sha256": "16f510afc61029d71fdc76c67e203640dfe2d0747cfeb447f92d3dff9838b8fb"
+  }
+}

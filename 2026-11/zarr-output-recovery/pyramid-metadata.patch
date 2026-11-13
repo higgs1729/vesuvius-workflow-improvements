@@ -1,0 +1,34 @@
+--- a/volume-cartographer/apps/src/vc_render_tifxyz.cpp
++++ b/volume-cartographer/apps/src/vc_render_tifxyz.cpp
+@@ -654,11 +654,11 @@
+                     const std::string& accumTypeStr, size_t accumSamples,
+                     const cv::Size& canvasSize, size_t CZ, size_t CH, size_t CW,
+                     double baseVoxelSize, const std::string& voxelUnit,
+-                    double pixelsPerVoxel)
++                    double pixelsPerVoxel, bool wantPyramid)
+ {
+     vcr::zarr::MultiscalesOptions ome;
+     ome.name = "render";
+-    ome.levels = kRenderPyramid.levels;
++    ome.levels = wantPyramid ? kRenderPyramid.levels : 0;
+     ome.factors = kRenderPyramid.factors;
+     const bool physicalSizeKnown = std::isfinite(baseVoxelSize) && baseVoxelSize > 0.0;
+     if (physicalSizeKnown) {
+@@ -1453,7 +1453,7 @@
+ 
+                 writeZarrAttrs(outFilePath, vol_path, group_idx, baseZ, slice_step, accum_step,
+                                accum_type_str, accumOffsets.size(), outXY, baseZ, CH, CW,
+-                               render_level_voxel_size, zarr_voxel_unit, tgt_scale);
++                               render_level_voxel_size, zarr_voxel_unit, tgt_scale, wantPyramid);
+                 return true;
+             } else if (numParts > 1) {
+                 if (!vcr::zarr::isLocalZarrArray(std::filesystem::path(zarrOutputArg) / "0")) {
+@@ -1581,7 +1581,7 @@
+             if (numParts <= 1) {
+                 writeZarrAttrs(outFilePath, vol_path, group_idx, baseZ, slice_step, accum_step,
+                                accum_type_str, accumOffsets.size(), outXY, baseZ, CH, CW,
+-                               render_level_voxel_size, zarr_voxel_unit, tgt_scale);
++                               render_level_voxel_size, zarr_voxel_unit, tgt_scale, wantPyramid);
+             }
+         }
+         return true;

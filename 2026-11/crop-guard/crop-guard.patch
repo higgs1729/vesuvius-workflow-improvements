@@ -1,0 +1,38 @@
+--- a/volume-cartographer/apps/src/vc_render_tifxyz.cpp
++++ b/volume-cartographer/apps/src/vc_render_tifxyz.cpp
+@@ -832,7 +832,8 @@
+             "--accum or --composite-collapse; alpha and beerlambert always collapse the sampled layers into one "
+             "composite image (see --composite-collapse).")
+         ("crop-x", po::value<int>()->default_value(0), "Crop X") ("crop-y", po::value<int>()->default_value(0), "Crop Y")
+-        ("crop-width", po::value<int>()->default_value(0), "Crop width") ("crop-height", po::value<int>()->default_value(0), "Crop height")
++        ("crop-width", po::value<int>()->default_value(0), "Manual crop width (requires a positive height)")
++        ("crop-height", po::value<int>()->default_value(0), "Manual crop height (requires a positive width)")
+         ("auto-crop", po::bool_switch()->default_value(false), "Auto-crop to valid surface bbox")
+         ("affine", po::value<std::vector<std::string>>()->multitoken()->composing(), "Affine JSON files (append :inv to invert)")
+         ("affine-invert", po::value<std::vector<int>>()->multitoken()->composing(), "0-based indices to invert")
+@@ -965,6 +966,14 @@
+         return mergeTiffParts(tifOutputArg, numParts) ? EXIT_SUCCESS : EXIT_FAILURE;
+     }
+ 
++    const int cx = parsed["crop-x"].as<int>(), cy = parsed["crop-y"].as<int>();
++    const int cw = parsed["crop-width"].as<int>(), ch = parsed["crop-height"].as<int>();
++    const bool manual = cw > 0 && ch > 0;
++    if (!manual && (cx != 0 || cy != 0 || cw != 0 || ch != 0)) {
++        logPrintf(stderr, "Error: --crop-width and --crop-height must both be positive for a manual crop\n");
++        return EXIT_FAILURE;
++    }
++
+     std::string volumeSource = parsed.count("volume") ? parsed["volume"].as<std::string>() : "";
+     if (volumeSource.empty()) { logPrintf(stderr, "Error: --volume required\n"); return EXIT_FAILURE; }
+     std::filesystem::path vol_path = volumeSource;
+@@ -1387,9 +1396,7 @@
+                   group_idx, ds_scale, sA, double(tgt_scale), render_scale);
+ 
+         // Handle crop
+-        int cx = parsed["crop-x"].as<int>(), cy = parsed["crop-y"].as<int>();
+-        int cw = parsed["crop-width"].as<int>(), ch = parsed["crop-height"].as<int>();
+-        bool manual = cw > 0 && ch > 0, autoCrop = parsed["auto-crop"].as<bool>();
++        const bool autoCrop = parsed["auto-crop"].as<bool>();
+         if (autoCrop && manual) { logPrintf(stderr, "Error: --auto-crop and --crop-* are mutually exclusive\n"); return false; }
+ 
+         if (autoCrop && col_max >= col_min) {

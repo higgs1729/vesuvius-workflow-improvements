@@ -1,0 +1,287 @@
+{
+  "crops_sha256": "a0ab2993f2ef3e9e5ced124d89f64791eb7e48e5503cf876c1e7414c9e5ffd78",
+  "selection_precedes_ct_fetch": true,
+  "volume_id": "20250804134230",
+  "level": 0,
+  "axes": "ZYX",
+  "transform_xyz": {
+    "scale": 1,
+    "translation": 0
+  },
+  "roi_sample_requirements": [
+    {
+      "id": "before",
+      "geometry_sha256": "128d1a6b3217769bdb9c5844755d0e9aefb3f8137f2ca86753eaeea73a6c68bc",
+      "valid_pixels": 4096,
+      "sample_count": 20480,
+      "full_pure_counts": {
+        "0": 1408,
+        "2": 1408
+      },
+      "full_mixed_count": 1280,
+      "valid_with_partial_support_count": 0,
+      "chunk_count": 7,
+      "chunk_zyx": [
+        [
+          16,
+          22,
+          26
+        ],
+        [
+          16,
+          23,
+          26
+        ],
+        [
+          17,
+          22,
+          26
+        ],
+        [
+          17,
+          23,
+          26
+        ],
+        [
+          18,
+          23,
+          26
+        ],
+        [
+          19,
+          23,
+          25
+        ],
+        [
+          19,
+          23,
+          26
+        ]
+      ]
+    },
+    {
+      "id": "after-a",
+      "geometry_sha256": "e7907fc1bd88f69227b29288fb0a47b36153cc0249fc09e8006f361691b5c76b",
+      "valid_pixels": 2048,
+      "sample_count": 10240,
+      "full_pure_counts": {
+        "0": 2048
+      },
+      "full_mixed_count": 0,
+      "valid_with_partial_support_count": 0,
+      "chunk_count": 1,
+      "chunk_zyx": [
+        [
+          19,
+          23,
+          26
+        ]
+      ]
+    },
+    {
+      "id": "after-b",
+      "geometry_sha256": "fc5b85882b41917b82ec3d686a9502a5509768ca272b4bd4e440df912ec2b07f",
+      "valid_pixels": 1808,
+      "sample_count": 9040,
+      "full_pure_counts": {
+        "2": 1808
+      },
+      "full_mixed_count": 0,
+      "valid_with_partial_support_count": 0,
+      "chunk_count": 5,
+      "chunk_zyx": [
+        [
+          16,
+          22,
+          26
+        ],
+        [
+          16,
+          23,
+          26
+        ],
+        [
+          17,
+          22,
+          26
+        ],
+        [
+          17,
+          23,
+          26
+        ],
+        [
+          17,
+          23,
+          27
+        ]
+      ]
+    }
+  ],
+  "section_requirements": [
+    {
+      "original_face_id": 53045,
+      "original_component": 0,
+      "centroid_xyz": [
+        3342.5335286458335,
+        3028.8944498697915,
+        2455.139892578125
+      ],
+      "normal_xyz": [
+        -0.9312419910968487,
+        0.3613680401847579,
+        0.04692007620415802
+      ],
+      "plane_axis_xyz": 2,
+      "plane_index": 2455,
+      "section_bounds_xyz_inclusive": [
+        [
+          3312,
+          2998,
+          2455
+        ],
+        [
+          3372,
+          3058,
+          2455
+        ]
+      ],
+      "section_chunk_zyx": [
+        [
+          19,
+          23,
+          25
+        ],
+        [
+          19,
+          23,
+          26
+        ]
+      ]
+    },
+    {
+      "original_face_id": 63364,
+      "original_component": 2,
+      "centroid_xyz": [
+        3445.7254231770835,
+        2955.5281575520835,
+        2190.8463541666665
+      ],
+      "normal_xyz": [
+        -0.8205661166448764,
+        0.5204635914155313,
+        0.2361967362712573
+      ],
+      "plane_axis_xyz": 2,
+      "plane_index": 2191,
+      "section_bounds_xyz_inclusive": [
+        [
+          3415,
+          2925,
+          2191
+        ],
+        [
+          3475,
+          2985,
+          2191
+        ]
+      ],
+      "section_chunk_zyx": [
+        [
+          17,
+          22,
+          26
+        ],
+        [
+          17,
+          22,
+          27
+        ],
+        [
+          17,
+          23,
+          26
+        ],
+        [
+          17,
+          23,
+          27
+        ]
+      ]
+    },
+    {
+      "original_face_id": 64784,
+      "original_component": 2,
+      "centroid_xyz": [
+        3436.54052734375,
+        2990.997314453125,
+        2152.3148600260415
+      ],
+      "normal_xyz": [
+        -0.9128544997330773,
+        -0.16312443589069436,
+        0.37428208711133387
+      ],
+      "plane_axis_xyz": 1,
+      "plane_index": 2991,
+      "section_bounds_xyz_inclusive": [
+        [
+          3406,
+          2991,
+          2122
+        ],
+        [
+          3466,
+          2991,
+          2182
+        ]
+      ],
+      "section_chunk_zyx": [
+        [
+          16,
+          23,
+          26
+        ],
+        [
+          16,
+          23,
+          27
+        ],
+        [
+          17,
+          23,
+          26
+        ],
+        [
+          17,
+          23,
+          27
+        ]
+      ]
+    }
+  ],
+  "chunk_keys_zyx": [
+    "0/16/22/26",
+    "0/16/23/26",
+    "0/16/23/27",
+    "0/17/22/26",
+    "0/17/22/27",
+    "0/17/23/26",
+    "0/17/23/27",
+    "0/18/23/26",
+    "0/19/23/25",
+    "0/19/23/26"
+  ],
+  "n_chunks": 10,
+  "ct_bytes_expected": 20971520,
+  "offsets_voxels": [
+    -2,
+    -1,
+    0,
+    1,
+    2
+  ],
+  "voxel_neighbor_rule": "floor(coord \uff82\uff71 0.001) through floor(coord \uff82\uff71 0.001)+1 per ZYX axis, all layers; the chunk covering any intermediate integer is included. Sections use exact integer voxels.",
+  "portable_copy_note": "Original local geometry file paths omitted; numerical selection unchanged.",
+  "original_frozen_file_sha256": "5fb94376422caf38cf6a67a896ba61290806d6cf0df2fddb2a7b9f66f40c147f"
+}

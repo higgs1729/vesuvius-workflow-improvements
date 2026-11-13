@@ -1,0 +1,105 @@
+{
+  "status": "verified private candidate; not published or submitted",
+  "fixture": {
+    "surface": "20250929040153-auto_grown_20250929040153260, packed output",
+    "ct": "20250804134230-9.362um-1.2m-113keV-masked.zarr",
+    "crop_xywh": [
+      7356,
+      2272,
+      128,
+      128
+    ],
+    "layers": 101,
+    "slice_step": 1,
+    "accumulation_step": 0.5,
+    "accumulation": "mean",
+    "interpolation": "bicubic",
+    "format": "Zarr v2",
+    "dtype": "uint8"
+  },
+  "resume_fix": {
+    "exact_file_counts": {
+      "normal": 14,
+      "fresh-resume": 14,
+      "l0-only-resume": 14,
+      "interrupted-init-resume": 14,
+      "complete-resume": 14,
+      "multipart-prepared-resume": 14
+    },
+    "all_mixed_decoded_levels_match_control": true,
+    "independent_replay_files_match_saved_control": 15,
+    "independent_replay_created_levels": [
+      2,
+      4,
+      5
+    ],
+    "independent_replay_preserved_files": [
+      "0/.zarray",
+      "0/0.0.0",
+      "1/.zarray",
+      "1/.zattrs",
+      "3/.zarray"
+    ]
+  },
+  "combined_renderer": {
+    "normal_files_identical_to_control": 14,
+    "first_use_resume_files_identical_to_control": 14,
+    "pyramid_disabled_datasets": [
+      "0"
+    ],
+    "pyramid_disabled_arrays": [
+      "0"
+    ],
+    "normal_L0_metadata_and_chunk_bytes_match_control": true,
+    "crop_cli_cases": 18,
+    "pre_replay_metadata_files": 3,
+    "pre_replay_output_bytes": 1654,
+    "pre_replay_chunks": 0
+  },
+  "native_evidence_sha256": {
+    "resume_implementation": "54b1841282646edaa17ca287fbeef7cc227fc15b2e9f9ee61cabb5b61b114cdb",
+    "resume_independent_audit": "e9b96058759284d2f3467e7faefb049ad9da1c38d0d21a757d0ba79a8c5c6c11",
+    "resume_independent_replay": "db41f0df797aaa7623649500b425a4b3856f4514669ee36e6691f79dd9f9839d",
+    "combined_implementation": "e772ed364f594adcb15fc64970d92bdcb2cdab5cc640ddac67b8eb9a2a0c072b",
+    "combined_independent_verification": "6915808c4ab921fbd48b7e09b50036a31d1b98eaf39b3ba8e71ba62cf5893f5b"
+  },
+  "new_ct_bytes": 0,
+  "paid_cloud_computation_jpy": 0,
+  "unmeasured_costs": [
+    "local electricity",
+    "model usage"
+  ],
+  "limits": [
+    "one fixed real-CT fixture",
+    "constructed partial states rather than forced process termination",
+    "not all codecs or dtypes",
+    "Zarr v3 not tested",
+    "concurrent multipart not tested",
+    "combined renderer not rerun on every partial state",
+    "no downstream viewer or user-adoption evidence"
+  ],
+  "python_entry": {
+    "independent_level0_gzip_values": {
+      "chunks": 4,
+      "pixels": 64,
+      "all_equal": 17
+    },
+    "independent_level1_raw_values": {
+      "chunks": 1,
+      "pixels": 16,
+      "all_equal": 9
+    },
+    "existing_file_sha_and_mtime_preserved": true,
+    "missing_level2_metadata_created": true,
+    "original_four_argument_native_call_passed": true,
+    "full_package_initializers_executed": false,
+    "added_regression_function_passed": true,
+    "real_wrapper_and_native_extensions": true,
+    "pytest_runner_executed": false,
+    "full_installation_validated": false
+  },
+  "python_evidence_sha256": {
+    "implementation_checks": "21118d4f02af3f99d69c6a41ccbec57a4087c0e028bbe38b5d96479ee6db1628",
+    "independent_replay": "27ac4d27eb0a4a24590be52dc200310f714298845566e300384b047c95ef9a3a"
+  }
+}

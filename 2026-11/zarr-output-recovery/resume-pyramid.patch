@@ -1,0 +1,76 @@
+--- a/vc_reader/include/vc_reader/zarr_write.hpp
++++ b/vc_reader/include/vc_reader/zarr_write.hpp
+@@ -192,6 +192,10 @@
+ // Creates the arrays of levels 1..levels (metadata only) to go with a level 0 created
+ // from `level0`: the same dtype, codec and chunks, chunks capped to each level's shape.
+ void createPyramidLevels(const std::filesystem::path& root, const CreateOptions& level0, const PyramidOptions& options);
++// With `preserveExisting`, create only missing arrays, checking the shape, chunks
++// and dtype of existing levels without changing their metadata or stored chunks.
++void createPyramidLevels(const std::filesystem::path& root, const CreateOptions& level0,
++                         const PyramidOptions& options, bool preserveExisting);
+ // The same for the level 0 already stored at <root>/0. `overwrite` replaces existing levels.
+ void createPyramidLevels(const std::filesystem::path& root, const PyramidOptions& options, bool overwrite = false);
+ // Output chunks [begin, end), clamped to the level's chunk grid.
+--- a/vc_reader/src/cpp/zarr/pyramid.cpp
++++ b/vc_reader/src/cpp/zarr/pyramid.cpp
+@@ -161,16 +161,34 @@
+ 
+ void createPyramidLevels(const fs::path& root, const CreateOptions& level0, const PyramidOptions& options)
+ {
++    createPyramidLevels(root, level0, options, false);
++}
++
++void createPyramidLevels(const fs::path& root, const CreateOptions& level0, const PyramidOptions& options,
++                         bool preserveExisting)
++{
+     checkFactors(options);
+     if (level0.shape.size() != 3 || level0.chunks.size() != 3)
+         throw std::invalid_argument("pyramid levels must be 3-D");
+     auto level = level0;
++    level.overwrite = level0.overwrite && !preserveExisting;
+     for (int l = 1; l <= options.levels; ++l) {
+         for (std::size_t axis = 0; axis < 3; ++axis) {
+             level.shape[axis] = ceilDiv(level.shape[axis], options.factors[axis]);
+             level.chunks[axis] = std::min(level0.chunks[axis], level.shape[axis]);
+         }
+-        Writer::create(root / std::to_string(l), level);
++        const auto path = root / std::to_string(l);
++        if (preserveExisting) {
++            if (const auto document = readArrayDocument(path.string())) {
++                const auto meta = parseArrayMeta(*document);
++                if (meta.shape != level.shape || meta.chunks != level.chunks || meta.dtype != level.dtype)
++                    throw std::invalid_argument("existing pyramid array has incompatible shape, chunks or dtype at " + path.string());
++                continue;
++            }
++            if (isLocalZarrArray(path))
++                throw std::runtime_error("cannot read existing pyramid array metadata at " + path.string());
++        }
++        Writer::create(path, level);
+     }
+ }
+ 
+--- a/volume-cartographer/apps/src/vc_render_tifxyz.cpp
++++ b/volume-cartographer/apps/src/vc_render_tifxyz.cpp
+@@ -1524,9 +1524,19 @@
+             }
+         }
+ 
+-        // Single-part: create the pyramid datasets now; multi-part/resume: --pre created them.
+-        if (wantZarr && wantPyramid && !pre_flag && numParts <= 1 && !resumeFlag)
+-            vcr::zarr::createPyramidLevels(outFilePath, outputOptions, kRenderPyramid);
++        // Multi-part uses datasets created by --pre. Single-part resume may
++        // need to complete initialization, using the stored L0 layout and codec.
++        if (wantZarr && wantPyramid && !pre_flag && numParts <= 1) {
++            if (resumeFlag) {
++                const auto& meta = dsOut->meta();
++                if (meta.shape != outputOptions.shape || meta.chunks != outputOptions.chunks || meta.dtype != outputOptions.dtype)
++                    throw std::invalid_argument("existing L0 has incompatible shape, chunks or dtype at " + dsOut->path().string());
++                vcr::zarr::createPyramidLevels(outFilePath, vcr::zarr::createOptionsLike(meta),
++                                               kRenderPyramid, true);
++            } else {
++                vcr::zarr::createPyramidLevels(outFilePath, outputOptions, kRenderPyramid);
++            }
++        }
+ 
+         // Each part renders a contiguous range of tile rows. With a pyramid the
+         // ranges are multiples of 32 rows, so a part builds levels 1-5 of its rows alone.

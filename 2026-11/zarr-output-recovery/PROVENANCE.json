@@ -1,0 +1,40 @@
+{
+  "prepared_date_jst": "2026-11-13",
+  "status": "verified private candidate; not published or submitted",
+  "upstream_repository": "https://github.com/ScrollPrize/villa",
+  "patch_target_commit": "0080fa393724575d4f19059d91402757f9351b28",
+  "native_dependency_checkout": "7ad02f4f6e306b744ef6d2742dfe31fd55713ee5",
+  "target_file_blobs": {
+    "vc_reader/include/vc_reader/zarr_write.hpp": "9b2e88c6189e326673b2bd979b57bbe2cc6c7057",
+    "vc_reader/src/cpp/zarr/pyramid.cpp": "610f457a5207539d910a9d9578399b143b539d06",
+    "volume-cartographer/apps/src/vc_render_tifxyz.cpp": "3c0d4250ea484c616f4f8e2c260f7ce2a07f99d6",
+    "vc_reader/src/cpp/bindings.cpp": "51d8ae2071f37f3ef2fc5e5d1a7b2664ded47cff",
+    "vc_reader/src/vc_reader/reader/writer.py": "682f4604f0a9bfac6d406bc2efd9e2bddabdde4c",
+    "vc_reader/README.md": "e7ee9e1f9637433bd4fca82697a44bc377bfb164",
+    "vc_reader/tests/test_zarr_writer.py": "f07c79f0a2f9669a5b5b9b1ff82d933b5733245b"
+  },
+  "patch_sha256": {
+    "pyramid-metadata.patch": "cca4821117c279939113e773c96c56c19d9d9b42c36bc8f1db1c531af63b9146",
+    "resume-pyramid-python.patch": "e514365be446b64f7c847f17021aa1b5d8158f325ad60b7802dd5484d19046ee",
+    "resume-pyramid.patch": "92a703f53ca15787c2912ab9dbd9af18b98176b126b9a7aec9d3c77b2f81556d"
+  },
+  "python_patch_origin": "Study 125 fixed-main variant; one unchanged README context line differs from the study-121 variant. Executable code, thin wrapper and test code are identical.",
+  "fixed_main_apply_result_sha256": "d34b67292c10703c8efb30f3788fb7d4430c15cde415fc81a07ae8c3c3ff52e9",
+  "runtime_scope": "Native CLI/common C++ implementation and isolated real Python wrapper/native extensions verified. Full package initializers, wheel and pytest runner not exercised.",
+  "authorship": "Prepared using AI agents; native results checked by a separate AI agent.",
+  "evidence_studies": [
+    120,
+    121,
+    122,
+    123,
+    124,
+    125
+  ],
+  "python_check_sha256": "16f510afc61029d71fdc76c67e203640dfe2d0747cfeb447f92d3dff9838b8fb",
+  "python_runtime": {
+    "CPython": "3.12.3",
+    "nanobind": "2.10.2",
+    "NumPy": "2.2.6",
+    "system": "Ubuntu 24.04 amd64"
+  }
+}

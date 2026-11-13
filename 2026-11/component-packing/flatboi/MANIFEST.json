@@ -1,0 +1,83 @@
+{
+  "files": [
+    {
+      "path": "diagnostics/flatboi-observation.patch",
+      "bytes": 2921,
+      "sha256": "3385a844ab36e034058e0773a08c37ac94d1cebfbce8af7d0b7a7e7b35519eae"
+    },
+    {
+      "path": "diagnostics/raster-observation.patch",
+      "bytes": 2884,
+      "sha256": "867ca91737b119a221219543d90c93a8f830b97f35e20f698316f9544433202d"
+    },
+    {
+      "path": "images/component-ownership.png",
+      "bytes": 57354,
+      "sha256": "5fbe1cd4b4efda03e204e57e6cd16ff14ae7e58a7b4ce527e92ebaf1e5e3356f"
+    },
+    {
+      "path": "inputs.json",
+      "bytes": 3523,
+      "sha256": "c3e02834cf276fcddd05c70eb0659d1d5ac77eb47357758f5fdc2a955a6fd77d"
+    },
+    {
+      "path": "LICENSE-villa-root.txt",
+      "bytes": 1075,
+      "sha256": "87070eec603117b5365e2172999e81b08890aef91c1673383cf9779ee9c89976"
+    },
+    {
+      "path": "LICENSE-volume-cartographer.txt",
+      "bytes": 35158,
+      "sha256": "7243392431c702199701a29f34e84530f2884a4fe37aba54c0ee2ccd361d052b"
+    },
+    {
+      "path": "measure_run.py",
+      "bytes": 5233,
+      "sha256": "4802b88ae12320bda014139933fac624c0106afdaf3cf6afe5a39aa8249d5f6d"
+    },
+    {
+      "path": "mesh_quality.py",
+      "bytes": 2558,
+      "sha256": "0ad7a717ef1b0c1c6e72d219c28ca69c6f957eec80c50cbce9075f050d4212ac"
+    },
+    {
+      "path": "pack-components.patch",
+      "bytes": 7105,
+      "sha256": "579beabe7377499bf91a654ac0931b786a11314a3a3298bf6d934ca9643926d8"
+    },
+    {
+      "path": "PROVENANCE.json",
+      "bytes": 1388,
+      "sha256": "9170a9ec686e33ff29e77faab86566245a307974d00ebb64e3dc8088ea54f37d"
+    },
+    {
+      "path": "README.md",
+      "bytes": 8125,
+      "sha256": "b9231a66b16e9d3e707d3fc88106627bb0c8a3ff1aef171154bfd138e4ab697a"
+    },
+    {
+      "path": "results.json",
+      "bytes": 11691,
+      "sha256": "65043675183eba5e4ca5285f3ac4b9e5d1551b2723148d3d004db0254517c5c8"
+    },
+    {
+      "path": "REVIEW_JA.md",
+      "bytes": 2001,
+      "sha256": "9ed074e074e0ef781e204fbfd41376151a16118616ebb6db0b01bd3bef8dbd64"
+    },
+    {
+      "path": "VERIFICATION.md",
+      "bytes": 3642,
+      "sha256": "44b97ac11eb0821252d8cc45943c7a87b6ceec257fede6922411dcbf763cba85"
+    }
+  ],
+  "excluded": [
+    "__pycache__"
+  ],
+  "validation": {
+    "relative_markdown_links": "pass",
+    "json_and_python_syntax": "pass",
+    "bash_syntax": "pass",
+    "bash_snippets_executed": false
+  }
+}

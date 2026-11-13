@@ -1,0 +1,290 @@
+{
+  "first-before": {
+    "grid_yx": [
+      172,
+      553
+    ],
+    "source_vertices": 41349,
+    "source_faces": 78624,
+    "input_quads": 39312,
+    "source_components": 5,
+    "invalid_uv_vertices": 0,
+    "filtered_triangles": 0,
+    "output_points": 40944,
+    "rejected_events": 190,
+    "cross_component_rejected": 189,
+    "cross_component_grid_edges": 106,
+    "no_owned_sample_quads": 2855,
+    "gt20": 167,
+    "gt40": 87,
+    "max_finite_distance": 110.97262982555775,
+    "quads_without_component_samples": 0,
+    "quality": {
+      "input_faces": 78624,
+      "area3_total": 16450777.913587105,
+      "invalid_uv_faces": 0,
+      "zero_uv_area_faces": 0,
+      "negative_uv_area_faces": 0,
+      "undefined_or_nonpositive_uv_area_fraction": 0.0,
+      "positive_faces_only": {
+        "faces": 78624,
+        "area3_fraction": 1.0,
+        "area_weighted_normalized_symmetric_dirichlet": 1.0019354611106488,
+        "area_weighted_inverse_L2_rms": 1.0009191325497517,
+        "max_symmetric_singular_stretch": 2.2989900948601627,
+        "uv_area_over_3d_area": 1.0009542651245695,
+        "area_ratio_percentiles_1_50_99": [
+          0.8998095490633314,
+          1.001210593380776,
+          1.1238289682023181
+        ],
+        "normalized_symmetric_dirichlet_percentiles_50_95_99": [
+          1.0009451978191397,
+          1.0068607581570608,
+          1.0140794848609604
+        ]
+      },
+      "notes": "J maps the intrinsic 3D triangle to UV. Normalized symmetric Dirichlet is sum(sigma^2+sigma^-2)/4 with isometry=1. Invalid, collapsed, and inverted faces are reported separately, not assigned zero distortion."
+    },
+    "input_sha256": {
+      "meta.json": "36dc7600f31d7f16fc252d8ab5b3ce57931a399c48343d2821436a3c1b0e6317",
+      "x.tif": "da6fdece28f8fb89ff6d2506ae4347e13cf245454b95b9f1997046b6a3dbd7dc",
+      "y.tif": "51b6d36f7b7afb0a72ae9a90b6e16f94663228bf4a0172cf5eedeb93e4cfab30",
+      "z.tif": "44b3d11e1f130db7a060671ac429340b1ed6ab296697905696860338cf595eaa"
+    },
+    "scope": "Original quad centres to samples of the same source component. Raster rejections are events, not an exhaustive continuous-overlap count. This does not measure ink readability."
+  },
+  "first-after": {
+    "grid_yx": [
+      172,
+      680
+    ],
+    "source_vertices": 41349,
+    "source_faces": 78624,
+    "input_quads": 39312,
+    "source_components": 5,
+    "invalid_uv_vertices": 0,
+    "filtered_triangles": 0,
+    "output_points": 41149,
+    "rejected_events": 1,
+    "cross_component_rejected": 0,
+    "cross_component_grid_edges": 0,
+    "no_owned_sample_quads": 2624,
+    "gt20": 0,
+    "gt40": 0,
+    "max_finite_distance": 15.97609455314062,
+    "quads_without_component_samples": 0,
+    "quality": {
+      "input_faces": 78624,
+      "area3_total": 16450777.913587105,
+      "invalid_uv_faces": 0,
+      "zero_uv_area_faces": 0,
+      "negative_uv_area_faces": 0,
+      "undefined_or_nonpositive_uv_area_fraction": 0.0,
+      "positive_faces_only": {
+        "faces": 78624,
+        "area3_fraction": 1.0,
+        "area_weighted_normalized_symmetric_dirichlet": 1.001935461120889,
+        "area_weighted_inverse_L2_rms": 1.000919141447762,
+        "max_symmetric_singular_stretch": 2.2989900948601627,
+        "uv_area_over_3d_area": 1.0009542472663913,
+        "area_ratio_percentiles_1_50_99": [
+          0.8998095490633314,
+          1.0012110986610825,
+          1.1238290945665304
+        ],
+        "normalized_symmetric_dirichlet_percentiles_50_95_99": [
+          1.0009452562188315,
+          1.0068607618086973,
+          1.0140794848609604
+        ]
+      },
+      "notes": "J maps the intrinsic 3D triangle to UV. Normalized symmetric Dirichlet is sum(sigma^2+sigma^-2)/4 with isometry=1. Invalid, collapsed, and inverted faces are reported separately, not assigned zero distortion."
+    },
+    "input_sha256": {
+      "meta.json": "36dc7600f31d7f16fc252d8ab5b3ce57931a399c48343d2821436a3c1b0e6317",
+      "x.tif": "da6fdece28f8fb89ff6d2506ae4347e13cf245454b95b9f1997046b6a3dbd7dc",
+      "y.tif": "51b6d36f7b7afb0a72ae9a90b6e16f94663228bf4a0172cf5eedeb93e4cfab30",
+      "z.tif": "44b3d11e1f130db7a060671ac429340b1ed6ab296697905696860338cf595eaa"
+    },
+    "scope": "Original quad centres to samples of the same source component. Raster rejections are events, not an exhaustive continuous-overlap count. This does not measure ink readability."
+  },
+  "first-low": {
+    "grid_yx": [
+      155,
+      617
+    ],
+    "source_vertices": 41349,
+    "source_faces": 78624,
+    "input_quads": 39312,
+    "source_components": 5,
+    "invalid_uv_vertices": 103,
+    "filtered_triangles": 225,
+    "output_points": 23003,
+    "rejected_events": 11522,
+    "cross_component_rejected": 0,
+    "cross_component_grid_edges": 0,
+    "no_owned_sample_quads": 22776,
+    "gt20": 18424,
+    "gt40": 11941,
+    "max_finite_distance": 474.1361868855417,
+    "quads_without_component_samples": 72,
+    "quality": {
+      "input_faces": 78624,
+      "area3_total": 16450777.913587105,
+      "invalid_uv_faces": 225,
+      "zero_uv_area_faces": 21613,
+      "negative_uv_area_faces": 472,
+      "undefined_or_nonpositive_uv_area_fraction": 0.2873037590817838,
+      "positive_faces_only": {
+        "faces": 56314,
+        "area3_fraction": 0.7126962409182163,
+        "area_weighted_normalized_symmetric_dirichlet": 1384962284856.8171,
+        "area_weighted_inverse_L2_rms": 1664309.0367211986,
+        "max_symmetric_singular_stretch": 604236112.5106794,
+        "uv_area_over_3d_area": 1.109414668607029,
+        "area_ratio_percentiles_1_50_99": [
+          0.6153390888604804,
+          0.9784742280009822,
+          1.2951309301108427
+        ],
+        "normalized_symmetric_dirichlet_percentiles_50_95_99": [
+          1.0075943295058305,
+          1.1158970632201148,
+          18.683664050569448
+        ]
+      },
+      "notes": "J maps the intrinsic 3D triangle to UV. Normalized symmetric Dirichlet is sum(sigma^2+sigma^-2)/4 with isometry=1. Invalid, collapsed, and inverted faces are reported separately, not assigned zero distortion."
+    },
+    "input_sha256": {
+      "meta.json": "36dc7600f31d7f16fc252d8ab5b3ce57931a399c48343d2821436a3c1b0e6317",
+      "x.tif": "da6fdece28f8fb89ff6d2506ae4347e13cf245454b95b9f1997046b6a3dbd7dc",
+      "y.tif": "51b6d36f7b7afb0a72ae9a90b6e16f94663228bf4a0172cf5eedeb93e4cfab30",
+      "z.tif": "44b3d11e1f130db7a060671ac429340b1ed6ab296697905696860338cf595eaa"
+    },
+    "scope": "Original quad centres to samples of the same source component. Raster rejections are events, not an exhaustive continuous-overlap count. This does not measure ink readability."
+  },
+  "second-before": {
+    "grid_yx": [
+      252,
+      2637
+    ],
+    "source_vertices": 249944,
+    "source_faces": 478224,
+    "input_quads": 239112,
+    "source_components": 9,
+    "invalid_uv_vertices": 0,
+    "filtered_triangles": 0,
+    "output_points": 254263,
+    "rejected_events": 757,
+    "cross_component_rejected": 399,
+    "cross_component_grid_edges": 284,
+    "no_owned_sample_quads": 13424,
+    "gt20": 485,
+    "gt40": 205,
+    "max_finite_distance": 118.26599578640855,
+    "quads_without_component_samples": 0,
+    "quality": {
+      "input_faces": 478224,
+      "area3_total": 101749890.19763327,
+      "invalid_uv_faces": 0,
+      "zero_uv_area_faces": 0,
+      "negative_uv_area_faces": 0,
+      "undefined_or_nonpositive_uv_area_fraction": 0.0,
+      "positive_faces_only": {
+        "faces": 478224,
+        "area3_fraction": 1.0,
+        "area_weighted_normalized_symmetric_dirichlet": 1.001459419732357,
+        "area_weighted_inverse_L2_rms": 1.0002263946692005,
+        "max_symmetric_singular_stretch": 1.9170737111118366,
+        "uv_area_over_3d_area": 1.001655562065588,
+        "area_ratio_percentiles_1_50_99": [
+          0.908145707629537,
+          1.0018840643481035,
+          1.106689835975971
+        ],
+        "normalized_symmetric_dirichlet_percentiles_50_95_99": [
+          1.0006943445954426,
+          1.0050989431112556,
+          1.0118567702413623
+        ]
+      },
+      "notes": "J maps the intrinsic 3D triangle to UV. Normalized symmetric Dirichlet is sum(sigma^2+sigma^-2)/4 with isometry=1. Invalid, collapsed, and inverted faces are reported separately, not assigned zero distortion."
+    },
+    "input_sha256": {
+      "meta.json": "876bf0f7c351641a5e541a004e159af8e4550601b96d08d152e92ab9c7486e44",
+      "x.tif": "f2d515066d64b832d1fbe7ee0f06c2423c53448d5da3c0da51132fa6ca166f03",
+      "y.tif": "6ee10487af838fee82d553dd1c933b8cf061a881057f1013aa7edbedec50b9e3",
+      "z.tif": "3deeee25a377eddf8643746ebd3c1eb4a20c114f17b8e7e923fb0b63f796ece1"
+    },
+    "scope": "Original quad centres to samples of the same source component. Raster rejections are events, not an exhaustive continuous-overlap count. This does not measure ink readability."
+  },
+  "second-after": {
+    "grid_yx": [
+      252,
+      3027
+    ],
+    "source_vertices": 249944,
+    "source_faces": 478224,
+    "input_quads": 239112,
+    "source_components": 9,
+    "invalid_uv_vertices": 0,
+    "filtered_triangles": 0,
+    "output_points": 254668,
+    "rejected_events": 356,
+    "cross_component_rejected": 0,
+    "cross_component_grid_edges": 0,
+    "no_owned_sample_quads": 13100,
+    "gt20": 202,
+    "gt40": 82,
+    "max_finite_distance": 71.72693767663469,
+    "quads_without_component_samples": 0,
+    "quality": {
+      "input_faces": 478224,
+      "area3_total": 101749890.19763327,
+      "invalid_uv_faces": 0,
+      "zero_uv_area_faces": 0,
+      "negative_uv_area_faces": 0,
+      "undefined_or_nonpositive_uv_area_fraction": 0.0,
+      "positive_faces_only": {
+        "faces": 478224,
+        "area3_fraction": 1.0,
+        "area_weighted_normalized_symmetric_dirichlet": 1.0014594222483364,
+        "area_weighted_inverse_L2_rms": 1.0002264082057557,
+        "max_symmetric_singular_stretch": 1.9170737111118366,
+        "uv_area_over_3d_area": 1.0016555385950034,
+        "area_ratio_percentiles_1_50_99": [
+          0.9081437224369456,
+          1.0018823697667982,
+          1.1066993414639146
+        ],
+        "normalized_symmetric_dirichlet_percentiles_50_95_99": [
+          1.0006943445954426,
+          1.0050989585253478,
+          1.0118599886058368
+        ]
+      },
+      "notes": "J maps the intrinsic 3D triangle to UV. Normalized symmetric Dirichlet is sum(sigma^2+sigma^-2)/4 with isometry=1. Invalid, collapsed, and inverted faces are reported separately, not assigned zero distortion."
+    },
+    "input_sha256": {
+      "meta.json": "876bf0f7c351641a5e541a004e159af8e4550601b96d08d152e92ab9c7486e44",
+      "x.tif": "f2d515066d64b832d1fbe7ee0f06c2423c53448d5da3c0da51132fa6ca166f03",
+      "y.tif": "6ee10487af838fee82d553dd1c933b8cf061a881057f1013aa7edbedec50b9e3",
+      "z.tif": "3deeee25a377eddf8643746ebd3c1eb4a20c114f17b8e7e923fb0b63f796ece1"
+    },
+    "scope": "Original quad centres to samples of the same source component. Raster rejections are events, not an exhaustive continuous-overlap count. This does not measure ink readability."
+  },
+  "original_grid_control": {
+    "first": {
+      "gt20": 49,
+      "gt40": 0,
+      "mean_SD": 1.0628374056996228
+    },
+    "second": {
+      "gt20": 11,
+      "gt40": 0,
+      "mean_SD": 1.0521256605161815
+    },
+    "scope": "Different original-grid parameterization, no SLIM; not a coarse-UV-preserving replacement."
+  }
+}

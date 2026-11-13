@@ -1,0 +1,13 @@
+{
+  "prepared_date_jst": "2026-11-13",
+  "status": "private verified candidate, not published or submitted",
+  "source_commit": "0080fa393724575d4f19059d91402757f9351b28",
+  "source_git_blob": "3c0d4250ea484c616f4f8e2c260f7ce2a07f99d6",
+  "product_patch_sha256": "91d92e7cd12b975c4cc8be16d7580ef55d3548a659be772c2cd92bd786a61ee7",
+  "regression_check_sha256": "b62e4b0d5d117a6b073f60eb65e8d47089110c42ec9304c0831a4fb956985c39",
+  "independent_result_sha256": "8650ecc5b2c61b17a684abeac691e56012ad555aa773363c9cda7e639de8bbb8",
+  "implementation_report_sha256": "91c15a4a7f29c4c48edcb2974d0d23d6b620ae0babd201fbdf23814198179c8e",
+  "verification_report_sha256": "10ae5478dd349e155f373bcfaf2e633ce69e4707000548e932311097a08d824d",
+  "evidence_workspace": "kensyoukin studies 116 and 117",
+  "authorship": "Prepared with AI agents; separate AI agent verification."
+}

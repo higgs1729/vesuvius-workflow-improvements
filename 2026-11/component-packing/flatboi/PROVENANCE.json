@@ -1,0 +1,24 @@
+{
+  "tested_source_commit": "7ad02f4f6e306b744ef6d2742dfe31fd55713ee5",
+  "inspected_main_commit": "f0e441016900cb946bc3861025eca3a7cc2aae19",
+  "flatboi_base_git_blob": "2dcf5981008e6b68b8c29ef7e083fc769f40e163",
+  "SurfaceMeshing_base_git_blob": "8a066104309f320d52f563c578ee81c171c38d51",
+  "product_patch_sha256": "579beabe7377499bf91a654ac0931b786a11314a3a3298bf6d934ca9643926d8",
+  "product_binary_sha256": "91d404f7a07a8b58af6641f07c134ce5472e2dc5fc226d795b1b3b2029ea932b",
+  "diagnostic_binary_sha256": "4e7238eb07a2b43386a97f69d22ee2edd69c47c36c29b3a2c6499c0b91b9139f",
+  "implementation_manifest_sha256": "861ec8e7618667bf434f6dfbf3c5724cbe388bdb6ff54a274222ad56f0e90c2b",
+  "independent_verification_report_sha256": "063f651d95cb2be4bf024f09dd92feb600e019183341d7f98dcbf16ba174ceb1",
+  "independent_verification_result_sha256": "23e697845f53c8909837a6147b8de1c4bd2144587b17135c1187e18aaa0d2bc9",
+  "implementation_agent": "gpt-6.1-sol / xhigh",
+  "verification_agent": "separate gpt-6.1-sol / high",
+  "native_environment": "WSL Ubuntu24.04, GCC13, O0, CPU1, 1 numeric thread, AS4GiB, 300s",
+  "portable_evaluator_environment": {
+    "python": "3.14.6",
+    "numpy": "2.5.2",
+    "scipy": "1.18.1",
+    "tifffile": "2026.10.15"
+  },
+  "new_paid_compute_usd": 0,
+  "human_use_or_review_claimed": false,
+  "publication_status": "private review package"
+}

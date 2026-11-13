@@ -1,0 +1,74 @@
+--- a/volume-cartographer/core/src/SurfaceMeshing.cpp
++++ b/volume-cartographer/core/src/SurfaceMeshing.cpp
+@@ -4,6 +4,8 @@
+ #include "vc/core/util/QuadSurface.hpp"
+ 
+ #include <algorithm>
++#include <cstdlib>
++#include <nlohmann/json.hpp>
+ #include <cmath>
+ #include <fstream>
+ #include <iostream>
+@@ -13,6 +15,11 @@
+ #include <string>
+ 
+ namespace vc::meshing {
++namespace {
++thread_local cv::Mat_<int>* r005_owner=nullptr;
++thread_local nlohmann::json* r005_overlaps=nullptr;
++thread_local int r005_face=-1;
++}
+ 
+ int decimationStride(float ratio)
+ {
+@@ -322,9 +329,32 @@
+     // Create points matrix initialized with invalid values
+     cv::Mat_<cv::Vec3f>* points = new cv::Mat_<cv::Vec3f>(grid_size[1], grid_size[0], cv::Vec3f(-1, -1, -1));
+ 
+-    // Rasterize triangles onto the grid
+-    for (const auto& face : faces) {
+-        rasterizeTriangle(*points, face);
++    // [DEBUG-r005] Record ownership without changing the fill rule or write order.
++    const char* trace_path = std::getenv("FLATBOI_RASTER_DIAGNOSTICS");
++    cv::Mat_<int> owners;
++    nlohmann::json overlaps = nlohmann::json::array();
++    if (trace_path) {
++        owners = cv::Mat_<int>(grid_size[1],grid_size[0],-1);
++        r005_owner=&owners; r005_overlaps=&overlaps;
++    }
++    for (std::size_t fi=0;fi<faces.size();++fi) {
++        r005_face=int(fi);
++        rasterizeTriangle(*points,faces[fi]);
++    }
++    r005_owner=nullptr; r005_overlaps=nullptr; r005_face=-1;
++    if (trace_path) {
++        nlohmann::json trace;
++        trace["grid_shape_yx"]={grid_size[1],grid_size[0]};
++        trace["uv_min_xy"]={uv_min[0],uv_min[1]};
++        trace["uv_max_xy"]={uv_max[0],uv_max[1]};
++        trace["face_index_space"]="filtered faces with valid UVs, original order";
++        trace["face_count"]=faces.size();
++        trace["owners_row_major"]=nlohmann::json::array();
++        for (int y=0;y<owners.rows;++y) for (int x=0;x<owners.cols;++x)
++            trace["owners_row_major"].push_back(owners(y,x));
++        trace["overlap_xy_owner_rejected"]=std::move(overlaps);
++        std::ofstream output(trace_path); output<<trace.dump();
++        if (!output) throw std::runtime_error("[DEBUG-r005] raster trace write failed");
+     }
+ 
+     // Count valid points
+@@ -490,12 +520,14 @@
+                 continue;
+             }
+             if (vc::geometry::validSurfacePoint(points(y, x))) {
++                if (r005_owner) r005_overlaps->push_back({x,y,(*r005_owner)(y,x),r005_face});
+                 continue; // first triangle wins
+             }
+             const float b0 = static_cast<float>(w0 * inv_area);
+             const float b1 = static_cast<float>(w1 * inv_area);
+             const float b2 = static_cast<float>(w2 * inv_area);
+             points(y, x) = b0 * pos[0] + b1 * pos[1] + b2 * pos[2];
++            if (r005_owner) (*r005_owner)(y,x)=r005_face;
+         }
+     }
+ }
