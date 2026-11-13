@@ -1,0 +1,200 @@
+diff --git a/vc_reader/README.md b/vc_reader/README.md
+index e7ee9e1..1021249 100644
+--- a/vc_reader/README.md
++++ b/vc_reader/README.md
+@@ -82,7 +82,7 @@ entry points, so also search `include/vc_reader/` before concluding something is
+ | Disk caches: budgets, cache discovery, VC3D cache roots and leases, low-disk handling | `zarr.hpp`: `zarr::openLayers`, `diskBudget`, `decodedCachePath`, `vc3dConfigDirectory`, `vc3dCacheRoot`, `selectedVc3dCacheRoot`, `vc3dVolumeId`, `createVc3dVolumeDir`, `Vc3dLease`, `LowDiskSpace` | `zarr/layers.cpp`, `disk_budget.cpp`, `disk_cache.hpp`, `write_behind.hpp` | `reader/disk_cache.py` |
+ | Write arrays (v2/v3, shards, local or S3), attributes, groups, inventories | `zarr_write.hpp`: `zarr::Writer`, `createGroup`, `removeNode`, `nodeChildren`, `readAttributes`, `writeAttributes`, `inventory`, `atomicWrite`, `compressBytes`, `decompressBytes`, `decompressZstdFrame` | `zarr/writer.cpp` | `reader/writer.py`: `ZarrWriter`, `create_group`, `zarr_inventory`, `atomic_write`, `compress_bytes`, `decompress_bytes`, `decompress_zstd_frame` |
+ | Object store over a local directory or S3 prefix | `zarr_write.hpp`: `zarr::Store` | `zarr/store.cpp` | `ObjectStore` |
+-| Build pyramids and OME multiscales metadata | `zarr_write.hpp`: `zarr::writePyramid`, `writePyramidLevel`, `createPyramidLevels`, `omeMultiscales` | `zarr/pyramid.cpp` | `write_pyramid`, `write_pyramid_level`, `create_pyramid_levels`, `ome_multiscales` |
++| Build pyramids and OME multiscales metadata, optionally initializing only missing levels | `zarr_write.hpp`: `zarr::writePyramid`, `writePyramidLevel`, `createPyramidLevels`, `omeMultiscales` | `zarr/pyramid.cpp` | `write_pyramid`, `write_pyramid_level`, `create_pyramid_levels`, `ome_multiscales` |
+ | Compress and decompress bytes | `zarr_write.hpp`: `zarr::compressBytes`, `decompressBytes` | `zarr/writer.cpp`, `codecs.hpp`, `lzw.hpp` | `compress_bytes`, `decompress_bytes` |
+ | Atomic and durable file writes; directory publication with rollback; snapshots | `zarr.hpp`: `zarr::atomicWrite`, `Durability`; `publication.hpp` (`vc_reader::catalog`): `files::publishDirectory`, `replaceFile`, `recoverDirectory`, `snapshot` | `atomic_file.hpp`, `zarr/layers.cpp`, `publication.cpp` | `snapshot` |
+ 
+diff --git a/vc_reader/include/vc_reader/zarr_write.hpp b/vc_reader/include/vc_reader/zarr_write.hpp
+index 9b2e88c..0fe8087 100644
+--- a/vc_reader/include/vc_reader/zarr_write.hpp
++++ b/vc_reader/include/vc_reader/zarr_write.hpp
+@@ -192,6 +192,10 @@ struct PyramidOptions {
+ // Creates the arrays of levels 1..levels (metadata only) to go with a level 0 created
+ // from `level0`: the same dtype, codec and chunks, chunks capped to each level's shape.
+ void createPyramidLevels(const std::filesystem::path& root, const CreateOptions& level0, const PyramidOptions& options);
++// With `preserveExisting`, create only missing arrays, checking the shape, chunks
++// and dtype of existing levels without changing their metadata or stored chunks.
++void createPyramidLevels(const std::filesystem::path& root, const CreateOptions& level0,
++                         const PyramidOptions& options, bool preserveExisting);
+ // The same for the level 0 already stored at <root>/0. `overwrite` replaces existing levels.
+ void createPyramidLevels(const std::filesystem::path& root, const PyramidOptions& options, bool overwrite = false);
+ // Output chunks [begin, end), clamped to the level's chunk grid.
+diff --git a/vc_reader/src/cpp/bindings.cpp b/vc_reader/src/cpp/bindings.cpp
+index 51d8ae2..3ecb501 100644
+--- a/vc_reader/src/cpp/bindings.cpp
++++ b/vc_reader/src/cpp/bindings.cpp
+@@ -878,11 +878,17 @@ NB_MODULE(_reader, m)
+         options.threads = threads;
+         return options;
+     };
+-    m.def("create_pyramid_levels", [pyramidOptions](const std::string& root, int levels, const std::array<int, 3>& factors, bool overwrite) {
++    m.def("create_pyramid_levels", [pyramidOptions](const std::string& root, int levels, const std::array<int, 3>& factors,
++                                                    bool overwrite, bool preserveExisting) {
+         const auto options = pyramidOptions(levels, factors, "mean", 0);
+         nb::gil_scoped_release release;
+-        vcr::zarr::createPyramidLevels(root, options, overwrite);
+-    }, "root"_a, "levels"_a, "factors"_a, "overwrite"_a);
++        if (preserveExisting) {
++            const auto level0 = vcr::zarr::Writer::open(std::filesystem::path(root) / "0");
++            vcr::zarr::createPyramidLevels(root, vcr::zarr::createOptionsLike(level0.meta()), options, true);
++        } else {
++            vcr::zarr::createPyramidLevels(root, options, overwrite);
++        }
++    }, "root"_a, "levels"_a, "factors"_a, "overwrite"_a, "preserve_existing"_a = false);
+     m.def("write_pyramid_level", [pyramidOptions](const std::string& root, int level, const std::array<int, 3>& factors,
+                                                   const std::string& reduction, std::size_t threads,
+                                                   const std::optional<vcr::Index>& begin, const std::optional<vcr::Index>& end) {
+diff --git a/vc_reader/src/cpp/zarr/pyramid.cpp b/vc_reader/src/cpp/zarr/pyramid.cpp
+index 610f457..decec1f 100644
+--- a/vc_reader/src/cpp/zarr/pyramid.cpp
++++ b/vc_reader/src/cpp/zarr/pyramid.cpp
+@@ -160,17 +160,35 @@ Reduction parseReduction(const std::string& name)
+ }
+ 
+ void createPyramidLevels(const fs::path& root, const CreateOptions& level0, const PyramidOptions& options)
++{
++    createPyramidLevels(root, level0, options, false);
++}
++
++void createPyramidLevels(const fs::path& root, const CreateOptions& level0, const PyramidOptions& options,
++                         bool preserveExisting)
+ {
+     checkFactors(options);
+     if (level0.shape.size() != 3 || level0.chunks.size() != 3)
+         throw std::invalid_argument("pyramid levels must be 3-D");
+     auto level = level0;
++    level.overwrite = level0.overwrite && !preserveExisting;
+     for (int l = 1; l <= options.levels; ++l) {
+         for (std::size_t axis = 0; axis < 3; ++axis) {
+             level.shape[axis] = ceilDiv(level.shape[axis], options.factors[axis]);
+             level.chunks[axis] = std::min(level0.chunks[axis], level.shape[axis]);
+         }
+-        Writer::create(root / std::to_string(l), level);
++        const auto path = root / std::to_string(l);
++        if (preserveExisting) {
++            if (const auto document = readArrayDocument(path.string())) {
++                const auto meta = parseArrayMeta(*document);
++                if (meta.shape != level.shape || meta.chunks != level.chunks || meta.dtype != level.dtype)
++                    throw std::invalid_argument("existing pyramid array has incompatible shape, chunks or dtype at " + path.string());
++                continue;
++            }
++            if (isLocalZarrArray(path))
++                throw std::runtime_error("cannot read existing pyramid array metadata at " + path.string());
++        }
++        Writer::create(path, level);
+     }
+ }
+ 
+diff --git a/vc_reader/src/vc_reader/reader/writer.py b/vc_reader/src/vc_reader/reader/writer.py
+index 682f460..1dba7f8 100644
+--- a/vc_reader/src/vc_reader/reader/writer.py
++++ b/vc_reader/src/vc_reader/reader/writer.py
+@@ -369,11 +369,14 @@ def create_group(path: str | os.PathLike[str], *, attrs: dict[str, Any] | None =
+ 
+ 
+ def create_pyramid_levels(root: str | os.PathLike[str], levels: int, *, factors: Sequence[int] = (2, 2, 2),
+-                          overwrite: bool = False) -> None:
++                          overwrite: bool = False, preserve_existing: bool = False) -> None:
+     """Create local arrays ``root/1 .. root/levels`` (metadata only) to go with ``root/0``: its dtype and
+     codec, its chunks capped to each level's shape, each shape the level below divided by ``factors``, rounded up.
++    With ``preserve_existing``, only missing arrays are created, even if ``overwrite`` is set.
++    Existing levels must match the expected shape, chunk shape and dtype.
+     """
+-    _reader.create_pyramid_levels(os.fspath(root), int(levels), [int(f) for f in factors], bool(overwrite))
++    _reader.create_pyramid_levels(os.fspath(root), int(levels), [int(f) for f in factors], bool(overwrite),
++                                  bool(preserve_existing))
+ 
+ 
+ def write_pyramid_level(root: str | os.PathLike[str], level: int, *, factors: Sequence[int] = (2, 2, 2),
+diff --git a/vc_reader/tests/test_zarr_writer.py b/vc_reader/tests/test_zarr_writer.py
+index f07c79f..48a8ead 100644
+--- a/vc_reader/tests/test_zarr_writer.py
++++ b/vc_reader/tests/test_zarr_writer.py
+@@ -116,6 +116,21 @@ def test_write_pyramid_level_ranges_and_multiscales(tmp_path):
+     assert entry["datasets"][1]["coordinateTransformations"][1]["translation"] == [0.0, 0.0, 0.0]
+ 
+ 
++def test_create_pyramid_levels_preserves_existing_arrays(tmp_path):
++    ZarrWriter.create(tmp_path / "0", shape=(1, 8, 8), chunks=(1, 4, 4), dtype="u1")
++    level1 = ZarrWriter.create(tmp_path / "1", shape=(1, 4, 4), chunks=(1, 4, 4), dtype="u1",
++                               compressor="none", separator=".")
++    level1[...] = 9
++    metadata = tmp_path / "1/.zarray"
++    before = metadata.read_bytes(), metadata.stat().st_mtime_ns
++
++    create_pyramid_levels(tmp_path, 2, factors=(1, 2, 2), preserve_existing=True)
++
++    assert (metadata.read_bytes(), metadata.stat().st_mtime_ns) == before
++    assert ZarrReader.open(tmp_path / "1")[0, 0, 0] == 9
++    assert ZarrReader.open(tmp_path / "2").shape == (1, 2, 2)
++
++
+ def test_writer_converts_to_numpy(tmp_path):
+     writer = ZarrWriter.create(tmp_path / "a", shape=(2, 2), chunks=(2, 2), dtype="u1")
+     writer[0, 1] = 5
+diff --git a/volume-cartographer/apps/src/vc_render_tifxyz.cpp b/volume-cartographer/apps/src/vc_render_tifxyz.cpp
+index 3c0d425..9982cb2 100644
+--- a/volume-cartographer/apps/src/vc_render_tifxyz.cpp
++++ b/volume-cartographer/apps/src/vc_render_tifxyz.cpp
+@@ -654,11 +654,11 @@ void writeZarrAttrs(const std::filesystem::path& outDir,
+                     const std::string& accumTypeStr, size_t accumSamples,
+                     const cv::Size& canvasSize, size_t CZ, size_t CH, size_t CW,
+                     double baseVoxelSize, const std::string& voxelUnit,
+-                    double pixelsPerVoxel)
++                    double pixelsPerVoxel, bool wantPyramid)
+ {
+     vcr::zarr::MultiscalesOptions ome;
+     ome.name = "render";
+-    ome.levels = kRenderPyramid.levels;
++    ome.levels = wantPyramid ? kRenderPyramid.levels : 0;
+     ome.factors = kRenderPyramid.factors;
+     const bool physicalSizeKnown = std::isfinite(baseVoxelSize) && baseVoxelSize > 0.0;
+     if (physicalSizeKnown) {
+@@ -1453,7 +1453,7 @@ int main(int argc, char *argv[])
+ 
+                 writeZarrAttrs(outFilePath, vol_path, group_idx, baseZ, slice_step, accum_step,
+                                accum_type_str, accumOffsets.size(), outXY, baseZ, CH, CW,
+-                               render_level_voxel_size, zarr_voxel_unit, tgt_scale);
++                               render_level_voxel_size, zarr_voxel_unit, tgt_scale, wantPyramid);
+                 return true;
+             } else if (numParts > 1) {
+                 if (!vcr::zarr::isLocalZarrArray(std::filesystem::path(zarrOutputArg) / "0")) {
+@@ -1524,9 +1524,19 @@ int main(int argc, char *argv[])
+             }
+         }
+ 
+-        // Single-part: create the pyramid datasets now; multi-part/resume: --pre created them.
+-        if (wantZarr && wantPyramid && !pre_flag && numParts <= 1 && !resumeFlag)
+-            vcr::zarr::createPyramidLevels(outFilePath, outputOptions, kRenderPyramid);
++        // Multi-part uses datasets created by --pre. Single-part resume may
++        // need to complete initialization, using the stored L0 layout and codec.
++        if (wantZarr && wantPyramid && !pre_flag && numParts <= 1) {
++            if (resumeFlag) {
++                const auto& meta = dsOut->meta();
++                if (meta.shape != outputOptions.shape || meta.chunks != outputOptions.chunks || meta.dtype != outputOptions.dtype)
++                    throw std::invalid_argument("existing L0 has incompatible shape, chunks or dtype at " + dsOut->path().string());
++                vcr::zarr::createPyramidLevels(outFilePath, vcr::zarr::createOptionsLike(meta),
++                                               kRenderPyramid, true);
++            } else {
++                vcr::zarr::createPyramidLevels(outFilePath, outputOptions, kRenderPyramid);
++            }
++        }
+ 
+         // Each part renders a contiguous range of tile rows. With a pyramid the
+         // ranges are multiples of 32 rows, so a part builds levels 1-5 of its rows alone.
+@@ -1581,7 +1591,7 @@ int main(int argc, char *argv[])
+             if (numParts <= 1) {
+                 writeZarrAttrs(outFilePath, vol_path, group_idx, baseZ, slice_step, accum_step,
+                                accum_type_str, accumOffsets.size(), outXY, baseZ, CH, CW,
+-                               render_level_voxel_size, zarr_voxel_unit, tgt_scale);
++                               render_level_voxel_size, zarr_voxel_unit, tgt_scale, wantPyramid);
+             }
+         }
+         return true;

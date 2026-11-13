@@ -1,0 +1,413 @@
+{
+  "R005_independent": {
+    "keep_100": {
+      "first": {
+        "shape_yx": [
+          172,
+          683
+        ],
+        "source_shape_yx": [
+          172,
+          553
+        ],
+        "components": 5,
+        "scale": [
+          0.05000000074505806,
+          0.05000000074505806
+        ],
+        "old_owners_preserved_xyz_bits": 40944,
+        "new_owners_weights_and_xyz_match_bits": 41133,
+        "same_rejects_before": 1,
+        "same_rejects_after": 1,
+        "cross_rejects_before": 189,
+        "cross_rejects_after": 0,
+        "mixed_edges": 0,
+        "mixed_quads": 0,
+        "exposed_points": 189
+      },
+      "second": {
+        "shape_yx": [
+          252,
+          3033
+        ],
+        "source_shape_yx": [
+          252,
+          2637
+        ],
+        "components": 9,
+        "scale": [
+          0.05000000074505806,
+          0.05000000074505806
+        ],
+        "old_owners_preserved_xyz_bits": 254263,
+        "new_owners_weights_and_xyz_match_bits": 254662,
+        "same_rejects_before": 358,
+        "same_rejects_after": 358,
+        "cross_rejects_before": 399,
+        "cross_rejects_after": 0,
+        "mixed_edges": 0,
+        "mixed_quads": 0,
+        "exposed_points": 399
+      }
+    },
+    "fixed_ct": {
+      "before_crop_xywh": [
+        7428,
+        2378,
+        64,
+        64
+      ],
+      "offsets_voxels": [
+        -2,
+        -1,
+        0,
+        1,
+        2
+      ],
+      "source_voxel_size_um": 9.362,
+      "source_level": 0,
+      "surface_interpolation": "linear",
+      "ct_interpolation": "trilinear",
+      "original_mixed_support_pixels": 1280,
+      "pure_support_samples_equal_total": 14080,
+      "pairs": {
+        "component0": {
+          "pure_pixels": 1408,
+          "bit_identical_samples": 7040,
+          "mixed_to_invalid_pixels": 1280,
+          "required_saved_ct_keys": [
+            "0/19/23/25",
+            "0/19/23/26"
+          ],
+          "crop_xywh": [
+            7388,
+            2378,
+            64,
+            64
+          ],
+          "source_face": 53045,
+          "mixed_positions_still_valid": 0
+        },
+        "component2": {
+          "pure_pixels": 1408,
+          "bit_identical_samples": 7040,
+          "mixed_to_invalid_pixels": 1280,
+          "required_saved_ct_keys": [
+            "0/16/22/26",
+            "0/16/23/26",
+            "0/17/22/26",
+            "0/17/23/26"
+          ],
+          "crop_xywh": [
+            8608,
+            2378,
+            64,
+            64
+          ],
+          "source_face": 63364,
+          "mixed_positions_still_valid": 0
+        }
+      },
+      "figure_sha256": "390128528af3e0e2d5730c275a3dd43c8ad5b0c6cb3828dec3e7c55715b06288"
+    },
+    "single_component": {
+      "input_geometry": {
+        "grid_shape_yx": [
+          291,
+          262
+        ],
+        "used_vertices": 63499,
+        "valid_quads": 62913,
+        "triangles": 125826,
+        "renderable_components": 1
+      },
+      "output_shape_yx": [
+        286,
+        259
+      ],
+      "output_valid_points": 62646,
+      "xyz": {
+        "x.tif": {
+          "sha256": "484d5067f9f23abbae296a5ea6820089736c05ce222c586c94403dbd1e492734",
+          "shape_yx": [
+            286,
+            259
+          ],
+          "pixels": 74074,
+          "all_bits_equal": true
+        },
+        "y.tif": {
+          "sha256": "482768674a7c04d4c88b9c65e7d473e2c377c0314da767fb3ef7734fffc18492",
+          "shape_yx": [
+            286,
+            259
+          ],
+          "pixels": 74074,
+          "all_bits_equal": true
+        },
+        "z.tif": {
+          "sha256": "c84bbbf37c95fdafd185531c48c4f0faee6816488c107b5de1e97cb003ec4726",
+          "shape_yx": [
+            286,
+            259
+          ],
+          "pixels": 74074,
+          "all_bits_equal": true
+        }
+      },
+      "scale": [
+        0.05000000074505806,
+        0.05000000074505806
+      ],
+      "metadata_different_top_level_keys": [
+        "uuid"
+      ],
+      "energy_sha256": "8c4e42264512728ac8c9a31e3938415b926409225b84a0e5fa4463c02e2abfcb",
+      "energy_iteration_0_to_5": [
+        "8.0042917498",
+        "8.0025943139",
+        "8.0025248984",
+        "8.0025050412",
+        "8.0024976487",
+        "8.0024943049"
+      ]
+    },
+    "keep_1_5_first_surface": {
+      "source_shape_yx": [
+        155,
+        396
+      ],
+      "packed_shape_yx": [
+        155,
+        619
+      ],
+      "original_owners_preserved_xyz_bits": 21350,
+      "packed_owners": 23021,
+      "same_rejections_before": 11340,
+      "same_rejections_after": 11517,
+      "cross_rejections_before": 1848,
+      "newly_visible_same_rejections": 177,
+      "new_distinct_owner_cells": 1671,
+      "invalid_vertices": 103,
+      "excluded_faces": 225,
+      "cross_rejections_after": 0
+    }
+  },
+  "R009_independent": {
+    "R132_single_chunk": {
+      "normal_files_match": 14,
+      "preserved_existing_files_by_stop": {
+        "after-l0-chunk": 8,
+        "before-pyramid-arrays": 2
+      },
+      "original_failed_missing_L1_after_writing_L0": true,
+      "original_exit": 1,
+      "os_signal_established": false
+    },
+    "R157_two_chunks": {
+      "stopped_files": 8,
+      "final_files": 15,
+      "preserved_files_sha_mtime_inode": 8,
+      "new_second_l0_chunk": true,
+      "normal_resume_files_exact": true,
+      "levels": {
+        "0": {
+          "shape_zyx": [
+            28,
+            129,
+            1
+          ],
+          "chunks_zyx": [
+            28,
+            128,
+            1
+          ],
+          "logical_values": 3612,
+          "padding_zero_values": 3556,
+          "logical_sha256": "63133929530bce0d371bdd0691e681b5be72a4066b8255b2328f4746fc49c117"
+        },
+        "1": {
+          "shape_zyx": [
+            28,
+            65,
+            1
+          ],
+          "chunks_zyx": [
+            28,
+            65,
+            1
+          ],
+          "logical_values": 1820,
+          "padding_zero_values": 0,
+          "logical_sha256": "fb79a73daa34421c9ab0eefec1a44ca0161b587bdd8eb413f3167026d564232a"
+        },
+        "2": {
+          "shape_zyx": [
+            28,
+            33,
+            1
+          ],
+          "chunks_zyx": [
+            28,
+            33,
+            1
+          ],
+          "logical_values": 924,
+          "padding_zero_values": 0,
+          "logical_sha256": "64f68fa57b25be382f525f327f70b39850bec6b94116425675b9235d8019f03d"
+        },
+        "3": {
+          "shape_zyx": [
+            28,
+            17,
+            1
+          ],
+          "chunks_zyx": [
+            28,
+            17,
+            1
+          ],
+          "logical_values": 476,
+          "padding_zero_values": 0,
+          "logical_sha256": "1bd5fc01a249bb9014ee94b18dcf7f9a5abdad7345292067be7c54ca00a37673"
+        },
+        "4": {
+          "shape_zyx": [
+            28,
+            9,
+            1
+          ],
+          "chunks_zyx": [
+            28,
+            9,
+            1
+          ],
+          "logical_values": 252,
+          "padding_zero_values": 0,
+          "logical_sha256": "ba74b5694b364d750663ff7329ff87cae5dd2f49bcd9d294fab0768a04569d1a"
+        },
+        "5": {
+          "shape_zyx": [
+            28,
+            5,
+            1
+          ],
+          "chunks_zyx": [
+            28,
+            5,
+            1
+          ],
+          "logical_values": 140,
+          "padding_zero_values": 0,
+          "logical_sha256": "0b44b2e9179d78d90ac38b0eab3b087998c7a3326d9cb40e4c5ad20ea3ed42d0"
+        }
+      },
+      "ome_exact": true,
+      "termination_signal": "not established"
+    }
+  },
+  "R159_standard_build_earlier_base": {
+    "base_commit": "7ad02f4f6e306b744ef6d2742dfe31fd55713ee5",
+    "first_surface_xyz_matches_R150": true
+  },
+  "R160_integrated": {
+    "base_commit": "14d4e725df8b569e6fc8ceb3c04d130f705c1565",
+    "targets": [
+      "flatboi",
+      "vc_core",
+      "vc_obj2tifxyz",
+      "vc_render_tifxyz"
+    ],
+    "files": 2269,
+    "unmodified_source_files": 2259,
+    "R005_xyz_sha256": {
+      "x.tif": "c16a2b45b1fed2b85bc2898d002247ad1e5299673616cbcf0762204db94c51d1",
+      "y.tif": "cb18e6559b1582ea762e74446c7ac17c896e3ca1501ecef17877f52db224dbdb",
+      "z.tif": "219fa428ade0d4a3d09a6be1c5471c4121fa0ca3e42c9a4b68204343ddc8aea2"
+    },
+    "R005_scale": [
+      0.05000000074505806,
+      0.05000000074505806
+    ],
+    "R007_cases": {
+      "total": 18,
+      "early_rejection": 9,
+      "valid_reached_input_open": 5
+    },
+    "R009": {
+      "matching_files": 15,
+      "retained_L0_state_files": 4,
+      "levels": {
+        "0": {
+          "logical_sha256": "63133929530bce0d371bdd0691e681b5be72a4066b8255b2328f4746fc49c117",
+          "logical_values": 3612,
+          "zero_padding": 3556
+        },
+        "1": {
+          "logical_sha256": "fb79a73daa34421c9ab0eefec1a44ca0161b587bdd8eb413f3167026d564232a",
+          "logical_values": 1820,
+          "zero_padding": 0
+        },
+        "2": {
+          "logical_sha256": "64f68fa57b25be382f525f327f70b39850bec6b94116425675b9235d8019f03d",
+          "logical_values": 924,
+          "zero_padding": 0
+        },
+        "3": {
+          "logical_sha256": "1bd5fc01a249bb9014ee94b18dcf7f9a5abdad7345292067be7c54ca00a37673",
+          "logical_values": 476,
+          "zero_padding": 0
+        },
+        "4": {
+          "logical_sha256": "ba74b5694b364d750663ff7329ff87cae5dd2f49bcd9d294fab0768a04569d1a",
+          "logical_values": 252,
+          "zero_padding": 0
+        },
+        "5": {
+          "logical_sha256": "0b44b2e9179d78d90ac38b0eab3b087998c7a3326d9cb40e4c5ad20ea3ed42d0",
+          "logical_values": 140,
+          "zero_padding": 0
+        }
+      },
+      "OME_equal": true,
+      "normal_matches_R157_files": true
+    },
+    "R009_checks": {
+      "normal_matches_R157": {
+        "levels": true,
+        "root_attributes": true
+      },
+      "normal_files_match_R157": true,
+      "preserved_sha_mtime_inode": {
+        ".zgroup": true,
+        "0/.zarray": true,
+        "0/0/0/0": true,
+        "0/0/1/0": true
+      },
+      "fresh_resume": {
+        "levels": true,
+        "root_attributes": true,
+        "all_file_sha_and_sizes": true
+      },
+      "l0_only_resume": {
+        "levels": true,
+        "root_attributes": true,
+        "all_file_sha_and_sizes": true
+      },
+      "success": true
+    }
+  },
+  "source_records_sha256": {
+    "R154_local_extract": "6bc0688e1e388740c3e3ff1d77480b1adc454533ae69ee8f6f32fb5b8ad5ba92",
+    "R151_full_resolution": "ccf48f6a9319b94d51bc9913a8a096d3268fc22919a96157cd37e25a89822f53",
+    "R152_ct": "6a24fb13e33b5c1c3a2df3e854ecb09e6fc7a20a52b76caaae3b16501a0d4f24",
+    "R153_single_component": "ffa40fe05af0ccbcdd79401fa0326cea7fbac40e3e64d616675225e3e635f1eb",
+    "R155_low_keep": "b4f8e18c34e948fc2ece7eb1e2331c2506b7e4389801a76f684981105793c2a7",
+    "R159_old_base_standard_build": "81aba6ac5afac820b637b8f4e8b3e50ddd006835634607ccb2403f45f6654177",
+    "R132_independent_resume": "c875422e5218d2e68446ed9531cfc47e9635e64bf5d1c42153ea7b64a45da9fd",
+    "R157_multichunk": "3af47b2c503e97c5482353937a4d9ce81ca6d425f5f585fd28ad4cf1824fb7db",
+    "R160_independent_integration": "48a799e99e2df22af966acb72fc1103cf682dc90f0c6d475d7b2b2df4fc7bf16",
+    "R160_build": "e16537852a0e765ba3de26bb0f8a08042bd8baee49e50fb1015bbf9b9fa20ef5",
+    "R160_renderer_resume": "d013ceae26d3a703cd24d9f0fe87cec55f0b398d221b89365bb5c12ec2bb62be"
+  }
+}

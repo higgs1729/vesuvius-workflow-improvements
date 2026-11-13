@@ -2,6 +2,12 @@
 
 Three small improvements to the existing Volume Cartographer / vc_reader surface-rendering workflow, published on 13 November 2026. This repository contains product patches, reproducible checks, measurements, real-CT examples and their limits. It is intended to support one combined November Progress Prizes submission; publication does not mean the entry has been submitted or awarded.
 
+## Follow-up: preserve the original sampling grid
+
+A [follow-up package](2026-11-supplement/README.md) adds the optional `--pack-components-preserve-grid` mode and further evidence for the same three contributions. On two public meshes, the new mode preserves every original sample owner and XYZ bit while exposing 189 and 399 previously hidden samples. A selected real-CT control also preserves all 14,080 samples with single-component support. The package explains the separate low-keep result, remaining within-component conflicts, and limits on readability.
+
+All three contributions were subsequently built together with standard CMake on fixed upstream revision `14d4e725df8b569e6fc8ceb3c04d130f705c1565`. The first-surface XYZ output remained identical, the 18 crop CLI checks passed, and normal, fresh-resume and L0-only-resume Zarr output matched across 15 files and six logical levels. The follow-up includes the patches, fixed input references, measured results and tested build conditions; it is still part of one planned combined submission.
+
 | Improvement | Why it helps | Observed result |
 |---|---|---|
 | [Keep disconnected surface pieces separate](2026-11/component-packing/README.md) | Prevents unrelated pieces from overlapping or being joined in the flattened output. | Cross-component grid edges fell from 106 and 284 to zero on two public meshes. |
@@ -27,3 +33,4 @@ The [`2026-11/` directory](2026-11/) preserves the reviewed 51-file snapshot byt
 ## Licenses and data
 
 Newly authored additions and original explanatory material are offered under MIT according to the per-item notices. Modified Volume Cartographer remains GPLv3; upstream vc_reader/villa and dependencies retain their licenses. Dataset-derived figures and measurements retain their source terms; see [data attribution](2026-11/component-packing/DATA_SOURCES.md). No raw CT, source meshes, third-party build dependencies or compiled executables are included.
+

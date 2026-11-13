@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "key": "0/31/26/32",
+      "url": "https://vesuvius-challenge-open-data.s3.us-east-1.amazonaws.com/PHerc0139/volumes/20250728140407-9.362um-1.2m-113keV-masked.zarr/0/31/26/32",
+      "bytes": 2097152,
+      "sha256": "fae44439c239f7ad0f70ccf803619f8ae343684e682ee23759d85627e8493203"
+    },
+    {
+      "key": "0/32/26/32",
+      "url": "https://vesuvius-challenge-open-data.s3.us-east-1.amazonaws.com/PHerc0139/volumes/20250728140407-9.362um-1.2m-113keV-masked.zarr/0/32/26/32",
+      "bytes": 2097152,
+      "sha256": "ab30cffcb0753c3be21f0a60de4585d7cd4ad286333f8a81029314c5b0e2f77e"
+    }
+  ]
+}

@@ -1,0 +1,305 @@
+--- a/volume-cartographer/core/include/vc/core/util/SurfaceMeshing.hpp
++++ b/volume-cartographer/core/include/vc/core/util/SurfaceMeshing.hpp
+@@ -82,6 +82,8 @@
+     void setMesh(std::vector<cv::Vec3f> vertices, std::vector<cv::Vec2f> uvs, std::vector<UvFace> faces);
+ 
+     void determineGridDimensions(float stretch_factor = 1.0f);
++    // Pack along X on the already determined sampling lattice, in component order.
++    void packComponentsOnGrid(const std::vector<int>& vertex_components, const std::vector<int>& order);
+     QuadSurface* createQuadSurface(float mesh_units = 1.0f);
+ 
+ private:
+@@ -93,8 +95,10 @@
+     std::vector<UvFace> faces;
+ 
+     cv::Vec2f uv_min, uv_max;
+-    cv::Vec2i grid_size;
++    cv::Vec2i grid_size{0, 0};
+     cv::Vec2f scale;
++    int output_width = 0;
++    std::vector<int> face_x_shifts;
+     // UV handling
+     bool uv_is_metric = true;   // if true, scale comes from UV spacing
+     float uv_to_obj   = 1.0f;   // OBJ units per 1 UV unit (used when uv_is_metric)
+--- a/volume-cartographer/core/src/SurfaceMeshing.cpp
++++ b/volume-cartographer/core/src/SurfaceMeshing.cpp
+@@ -171,6 +171,12 @@
+ namespace {
+ // Sub-pixel resolution for fixed-point vertex snapping (8 fractional bits).
+ constexpr long long SUBPIXEL = 256;
++constexpr long long MAX_FIXED_COORD = 2'000'000'000LL;
++
++double gridCoordinate(float uv, float lower, double range, int size)
++{
++    return (double(uv) - lower) / range * (size - 1);
++}
+ 
+ // Twice the signed area of triangle (A, B, P): (B-A) x (P-A). Exact in int64.
+ long long edgeFn(long long ax, long long ay,
+@@ -189,12 +195,17 @@
+ 
+ void UvGridRasterizer::setMesh(std::vector<cv::Vec3f> vertices_, std::vector<cv::Vec2f> uvs_, std::vector<UvFace> faces_)
+ {
++    output_width = 0;
++    face_x_shifts.clear();
++    grid_size = {0, 0};
+     vertices = std::move(vertices_);
+     uvs = std::move(uvs_);
+     faces = std::move(faces_);
+ }
+ 
+ void UvGridRasterizer::determineGridDimensions(float stretch_factor) {
++    output_width = 0;
++    face_x_shifts.clear();
+     // Find UV bounds from all UVs used in faces
+     uv_min = cv::Vec2f(std::numeric_limits<float>::max(), std::numeric_limits<float>::max());
+     uv_max = cv::Vec2f(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest());
+@@ -310,7 +321,7 @@
+     // signed-area computation cannot overflow. The limit (~8.4M px/axis) is
+     // far above any real tifxyz grid; tripping it means the inputs are wrong.
+     const long long max_dim = std::max(grid_size[0], grid_size[1]);
+-    if (max_dim * SUBPIXEL >= 2'000'000'000LL) {
++    if (max_dim * SUBPIXEL >= MAX_FIXED_COORD) {
+         throw std::runtime_error(
+             "grid dimension too large for exact int64 rasterization: "
+             + std::to_string(max_dim));
+@@ -318,9 +329,67 @@
+ }
+ 
+ 
++void UvGridRasterizer::packComponentsOnGrid(const std::vector<int>& vertex_components, const std::vector<int>& order)
++{
++    if (order.size() < 2) return;
++    if (vertex_components.size() != vertices.size() || grid_size[0] < 2 || grid_size[1] < 2)
++        throw std::invalid_argument("grid packing requires component IDs and a determined grid");
++
++    struct Interval {
++        long long left = std::numeric_limits<long long>::max();
++        long long right = std::numeric_limits<long long>::lowest();
++    };
++    std::vector<Interval> bounds(order.size());
++    std::vector<int> rank(vertices.size(), -1);
++    for (std::size_t i = 0; i < order.size(); ++i)
++        rank.at(order[i]) = static_cast<int>(i);
++    const double range = std::max<double>(uv_max[0] - uv_min[0], 1e-12);
++    for (const auto& face : faces) {
++        const int part = rank.at(vertex_components.at(face.v[0]));
++        if (part < 0) throw std::invalid_argument("face missing a packing component");
++        auto& interval = bounds[part];
++        for (int i = 0; i < 3; ++i) {
++            if (rank.at(vertex_components.at(face.v[i])) != part)
++                throw std::invalid_argument("face spans packing components");
++            const auto uv = uvs.at(face.vt[i]);
++            if (!std::isfinite(uv[0]) || !std::isfinite(uv[1]))
++                throw std::invalid_argument("grid packing requires finite face UVs");
++            const double x = gridCoordinate(uv[0], uv_min[0], range, grid_size[0]);
++            const long long fixed_x = std::llround(x * SUBPIXEL);
++            interval.left = std::min(interval.left, fixed_x);
++            interval.right = std::max(interval.right, fixed_x);
++        }
++    }
++
++    std::vector<int> shifts;
++    shifts.reserve(order.size());
++    long long next_left = 0;
++    long long width = 0;
++    for (const auto& interval : bounds) {
++        if (interval.right < interval.left)
++            throw std::invalid_argument("packing component has no faces");
++        // Ceil the required translation to whole cells, including a two-cell gap.
++        const long long delta = next_left - interval.left;
++        const long long shift = delta / SUBPIXEL + (delta % SUBPIXEL > 0);
++        const long long right = interval.right + shift * SUBPIXEL;
++        width = (right + SUBPIXEL - 1) / SUBPIXEL + 1;
++        const auto cells = static_cast<std::uint64_t>(width) * grid_size[1];
++        if (width * SUBPIXEL >= MAX_FIXED_COORD || cells > std::numeric_limits<int>::max()
++            || (grid_cap_pixels > 0 && cells > grid_cap_pixels))
++            throw std::runtime_error("packed grid is too large to preserve sampling without rescaling");
++        shifts.push_back(static_cast<int>(shift));
++        next_left = right + 2 * SUBPIXEL;
++    }
++    output_width = static_cast<int>(width);
++    face_x_shifts.resize(faces.size());
++    for (std::size_t i = 0; i < faces.size(); ++i)
++        face_x_shifts[i] = shifts[rank[vertex_components[faces[i].v[0]]]];
++}
++
+ QuadSurface* UvGridRasterizer::createQuadSurface(float mesh_units) {
+     // Create points matrix initialized with invalid values
+-    cv::Mat_<cv::Vec3f>* points = new cv::Mat_<cv::Vec3f>(grid_size[1], grid_size[0], cv::Vec3f(-1, -1, -1));
++    const int width = output_width ? output_width : grid_size[0];
++    cv::Mat_<cv::Vec3f>* points = new cv::Mat_<cv::Vec3f>(grid_size[1], width, cv::Vec3f(-1, -1, -1));
+ 
+     // Rasterize triangles onto the grid
+     for (const auto& face : faces) {
+@@ -330,15 +399,15 @@
+     // Count valid points
+     int valid_count = 0;
+     for (int y = 0; y < grid_size[1]; y++) {
+-        for (int x = 0; x < grid_size[0]; x++) {
++        for (int x = 0; x < width; x++) {
+             if (vc::geometry::validSurfacePoint((*points)(y, x))) {
+                 valid_count++;
+             }
+         }
+     }
+ 
+-    std::cout << "Valid grid points: " << valid_count << " / " << (grid_size[0] * grid_size[1]) 
+-              << " (" << (100.0f * valid_count / (grid_size[0] * grid_size[1])) << "%)" << std::endl;
++    std::cout << "Valid grid points: " << valid_count << " / " << (width * grid_size[1]) 
++              << " (" << (100.0f * valid_count / (width * grid_size[1])) << "%)" << std::endl;
+ 
+     // Scale is currently in OBJ units. Convert to micrometers now.
+     if (valid_count == 0) {
+@@ -443,13 +512,15 @@
+     // is covered without the periodic gaps a float barycentric test left.
+     const double rx = std::max<double>(uv_max[0] - uv_min[0], 1e-12);
+     const double ry = std::max<double>(uv_max[1] - uv_min[1], 1e-12);
++    const int x_shift = face_x_shifts.empty() ? 0 : face_x_shifts[&face - faces.data()];
++    const long long fixed_x_shift = static_cast<long long>(x_shift) * SUBPIXEL;
+     long long X[3], Y[3];
+     double gx[3], gy[3];
+     for (int k = 0; k < 3; ++k) {
+         const cv::Vec2f uv = uvs[face.vt[k]];
+-        gx[k] = (double(uv[0]) - uv_min[0]) / rx * (grid_size[0] - 1);
+-        gy[k] = (double(uv[1]) - uv_min[1]) / ry * (grid_size[1] - 1);
+-        X[k] = std::llround(gx[k] * SUBPIXEL);
++        gx[k] = gridCoordinate(uv[0], uv_min[0], rx, grid_size[0]);
++        gy[k] = gridCoordinate(uv[1], uv_min[1], ry, grid_size[1]);
++        X[k] = std::llround(gx[k] * SUBPIXEL) + fixed_x_shift;
+         Y[k] = std::llround(gy[k] * SUBPIXEL);
+     }
+ 
+@@ -473,8 +544,10 @@
+     const long long bias2 = isTopLeft(X[1] - X[0], Y[1] - Y[0]) ? 0 : -1; // edge A->B
+ 
+     // Bounding box on the pixel grid.
+-    const int min_x = std::max(0, static_cast<int>(std::floor(std::min({gx[0], gx[1], gx[2]}))));
+-    const int max_x = std::min(grid_size[0] - 1, static_cast<int>(std::ceil(std::max({gx[0], gx[1], gx[2]}))));
++    const int source_min_x = std::max(0, static_cast<int>(std::floor(std::min({gx[0], gx[1], gx[2]}))));
++    const int source_max_x = std::min(grid_size[0] - 1, static_cast<int>(std::ceil(std::max({gx[0], gx[1], gx[2]}))));
++    const int min_x = std::max(0, source_min_x + x_shift);
++    const int max_x = std::min(points.cols - 1, source_max_x + x_shift);
+     const int min_y = std::max(0, static_cast<int>(std::floor(std::min({gy[0], gy[1], gy[2]}))));
+     const int max_y = std::min(grid_size[1] - 1, static_cast<int>(std::ceil(std::max({gy[0], gy[1], gy[2]}))));
+ 
+--- a/volume-cartographer/libs/flatboi/flatboi.cpp
++++ b/volume-cartographer/libs/flatboi/flatboi.cpp
+@@ -894,7 +894,18 @@
+   float keep_percent = 100.0f;
+   bool inpaint = false;
+   bool pack_components = false;
++  bool pack_components_preserve_grid = false;
+ };
++
++static Eigen::VectorXi vertexComponents(const vc::meshing::GridMesh& mesh)
++{
++  Eigen::MatrixXi F(mesh.faces.size(), 3);
++  for (std::size_t i = 0; i < mesh.faces.size(); ++i)
++    F.row(i) << mesh.faces[i][0], mesh.faces[i][1], mesh.faces[i][2];
++  Eigen::VectorXi labels;
++  igl::vertex_components(F, labels);
++  return labels;
++}
+ 
+ // Translate each connected piece into a separate horizontal interval.
+ static void packComponents(const vc::meshing::GridMesh& mesh,
+@@ -903,12 +914,7 @@
+                            std::vector<cv::Vec2f>& uvs)
+ {
+   if (faces.empty()) return;
+-
+-  Eigen::MatrixXi F(mesh.faces.size(), 3);
+-  for (std::size_t i = 0; i < mesh.faces.size(); ++i)
+-    F.row(i) << mesh.faces[i][0], mesh.faces[i][1], mesh.faces[i][2];
+-  Eigen::VectorXi labels;
+-  igl::vertex_components(F, labels);
++  const auto labels = vertexComponents(mesh);
+ 
+   const double inf = std::numeric_limits<double>::infinity();
+   struct Component {
+@@ -1048,8 +1054,30 @@
+     const double gap = has_src_scale && std::isfinite(scale[0]) ? 2.0 / scale[0] : 2.0;
+     packComponents(fine_mesh, faces, uv_valid, gap, uvs);
+   }
++  std::vector<int> vertex_components, component_order;
++  if (opt.pack_components_preserve_grid && !faces.empty()) {
++    if (!has_src_scale || !std::isfinite(scale[0]) || !std::isfinite(scale[1]))
++      throw std::invalid_argument("--pack-components-preserve-grid requires finite positive input scale");
++    const auto labels = vertexComponents(fine_mesh);
++    vertex_components.assign(labels.data(), labels.data() + labels.size());
++    std::vector<int> sizes(labels.maxCoeff()+1, 0);
++    std::vector<bool> eligible(sizes.size(), false);
++    for (int c : vertex_components) ++sizes[c];
++    for (const auto& face : faces) {
++      eligible[labels[face.v[0]]] = true;
++      for (int v : face.vt)
++        if (!std::isfinite(uvs[v][0]) || !std::isfinite(uvs[v][1]))
++          throw std::invalid_argument("--pack-components-preserve-grid requires finite face UVs");
++    }
++    for (std::size_t c = 0; c < sizes.size(); ++c)
++      if (eligible[c]) component_order.push_back(static_cast<int>(c));
++    std::stable_sort(component_order.begin(), component_order.end(),
++                     [&](int a, int b) { return sizes[a] > sizes[b]; });
++  }
+   rasterizer.setMesh(fine_mesh.positions, std::move(uvs), std::move(faces));
+   rasterizer.determineGridDimensions(1.0f);
++  if (opt.pack_components_preserve_grid)
++    rasterizer.packComponentsOnGrid(vertex_components, component_order);
+   std::unique_ptr<QuadSurface> flat(rasterizer.createQuadSurface(1.0f));
+   flat->meta = surface.meta;
+   return flat;
+@@ -1057,8 +1085,10 @@
+ 
+ static nlohmann::json parameters(const Options& opt)
+ {
+-  return {{"iterations", opt.iters}, {"energy", opt.energy_label}, {"tolerance", opt.conv_tol},
+-          {"keep_percent", opt.keep_percent}, {"inpaint", opt.inpaint}, {"pack_components", opt.pack_components}};
++  nlohmann::json result = {{"iterations", opt.iters}, {"energy", opt.energy_label}, {"tolerance", opt.conv_tol},
++                           {"keep_percent", opt.keep_percent}, {"inpaint", opt.inpaint}, {"pack_components", opt.pack_components}};
++  if (opt.pack_components_preserve_grid) result["pack_components_preserve_grid"] = true;
++  return result;
+ }
+ 
+ // A stored surface into a new surface object; its reports are published as the
+@@ -1133,7 +1163,8 @@
+               << "  --keep=<p> runs SLIM on ~p percent of the grid points and lifts the UVs to the\n"
+               << "  full grid, --inpaint fills interior holes first\n"
+               << "  --pack-components arranges disconnected pieces side by side before rasterizing.\n"
+-              << "  This can change the layout and output width. Overlaps within pieces remain.\n";
++              << "  This can change the layout and output width. Overlaps within pieces remain.\n"
++              << "  --pack-components-preserve-grid packs along X in whole cells on the original sampling grid.\n";
+   };
+ 
+   std::optional<StoreToolOptions> store_output;
+@@ -1141,6 +1172,7 @@
+   float keep_percent = 100.0f;
+   bool inpaint = false;
+   bool pack_components = false;
++  bool pack_components_preserve_grid = false;
+   std::vector<std::string> positional;
+   try {
+     std::vector<std::string> args(argv + 1, argv + argc);
+@@ -1160,6 +1192,8 @@
+         inpaint = true;
+       } else if (a == "--pack-components") {
+         pack_components = true;
++      } else if (a == "--pack-components-preserve-grid") {
++        pack_components_preserve_grid = true;
+       } else {
+         positional.push_back(std::move(a));
+       }
+@@ -1219,7 +1253,12 @@
+   std::ios::sync_with_stdio(false);
+   std::cout.setf(std::ios::unitbuf); // line-buffered: flush on '\n'
+ 
+-  const surface_mode::Options options{iters, energy, energy_label, conv_tol, keep_percent, inpaint, pack_components};
++  if (pack_components && pack_components_preserve_grid) {
++    std::cerr << "--pack-components and --pack-components-preserve-grid are mutually exclusive\n";
++    return 1;
++  }
++  const surface_mode::Options options{iters, energy, energy_label, conv_tol, keep_percent, inpaint,
++                                      pack_components, pack_components_preserve_grid};
+   try {
+     return store_mode ? surface_mode::run_store(*store_output, store_output->surfaces.front(), options)
+                       : surface_mode::run_tifxyz(input_path, tifxyz_output, options);

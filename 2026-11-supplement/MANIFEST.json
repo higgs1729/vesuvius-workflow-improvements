@@ -1,0 +1,129 @@
+{
+  "package": "november-workflow-supplement-20261113",
+  "contents": {
+    "DATA.md": {
+      "bytes": 2350,
+      "sha256": "8b175c6bad42f561085bcf69f034e3148a9a697d8d8ad826f5d842109059218e"
+    },
+    "EVIDENCE.md": {
+      "bytes": 6792,
+      "sha256": "1a4f3bdc9bc4bdec23da40b672da6295ee6e665981c35f29c2a745aacb688ee2"
+    },
+    "LICENSE_SCOPE.md": {
+      "bytes": 881,
+      "sha256": "db42a98bc8d706b8c2a5d1b7862e72b9a0795b45f9c748e984164e5e64ce3c62"
+    },
+    "README.md": {
+      "bytes": 1951,
+      "sha256": "4a0f8731b3e88f8af6c98d5c83c3d836020c36b0bcdbaebcb94051b8c00a07ab"
+    },
+    "REPRODUCE.md": {
+      "bytes": 5523,
+      "sha256": "8f83cf94a7dc0130f47ac56db369f58041ed8606a50ff574dea4d0c0e1d7c81e"
+    },
+    "RESULTS.json": {
+      "bytes": 11425,
+      "sha256": "243122478c7b2ea67579866a73f66b0d5975be2090a121de3bfd022f614a5b11"
+    },
+    "SOURCE_HASHES.json": {
+      "bytes": 5447,
+      "sha256": "7e93a69f428d276eebdf68180d8633764f06e7c392b715378e8df6f4efa31164"
+    },
+    "checks/check_crop_cli.py": {
+      "bytes": 4028,
+      "sha256": "b62e4b0d5d117a6b073f60eb65e8d47089110c42ec9304c0831a4fb956985c39"
+    },
+    "checks/check_zarr_python.py": {
+      "bytes": 6939,
+      "sha256": "16f510afc61029d71fdc76c67e203640dfe2d0747cfeb447f92d3dff9838b8fb"
+    },
+    "data/pherc0139-ct-chunks.json": {
+      "bytes": 626,
+      "sha256": "0ec76cc227c356af678e909038158e3e9780f10d9fe55246bfbd09f628ec454a"
+    },
+    "data/pherc0139-ct-metadata/.zattrs": {
+      "bytes": 3018,
+      "sha256": "97e968dbbf11cc856dc57648aaaa9e6cade5e6575472dcfdeac7cfa50f546dd9"
+    },
+    "data/pherc0139-ct-metadata/.zgroup": {
+      "bytes": 23,
+      "sha256": "e1e1914ae531ecb50e1ead685ef01895a5452faf5f25f35cd78f1f5de1367470"
+    },
+    "data/pherc0139-ct-metadata/0/.zarray": {
+      "bytes": 239,
+      "sha256": "562679cffc09a94b7342a38c37e49f433a4dfa6e3c93b7599dbeaec791186a35"
+    },
+    "data/pherc0139-ct-metadata/metadata.json": {
+      "bytes": 8125,
+      "sha256": "95917633ca11a1ddff2e6b7d66360c508f8158bbe05be277c8d51477befb5bae"
+    },
+    "data/pherc0814-ct-chunks.json": {
+      "bytes": 3268,
+      "sha256": "89f5fd5818556f151c1093695f9ecee0ec1590dafa68016d6a213a31cd8d9ba0"
+    },
+    "data/pherc0814-ct-metadata/.zattrs": {
+      "bytes": 3018,
+      "sha256": "97e968dbbf11cc856dc57648aaaa9e6cade5e6575472dcfdeac7cfa50f546dd9"
+    },
+    "data/pherc0814-ct-metadata/.zgroup": {
+      "bytes": 24,
+      "sha256": "2383746e67b4bcc2762b3f100f06c3fa2d5f149ab5a8e5da5d33521464a01959"
+    },
+    "data/pherc0814-ct-metadata/0/.zarray": {
+      "bytes": 239,
+      "sha256": "acad9dbc41bf7c9b5b983cdfd802308691e427ebb1a1a675561df717d50332a0"
+    },
+    "data/pherc0814-ct-metadata/metadata.json": {
+      "bytes": 8446,
+      "sha256": "7db0a497ed78165a17b681debacd40e6fadd99326aed8423b9e337007cad4b92"
+    },
+    "data/surface-inputs-pherc0814.json": {
+      "bytes": 3523,
+      "sha256": "c3e02834cf276fcddd05c70eb0659d1d5ac77eb47357758f5fdc2a955a6fd77d"
+    },
+    "data/surface-inputs-w035.json": {
+      "bytes": 1506,
+      "sha256": "4205e8f67a42c4d1025c97dde16ca31adcc3f8f0ff55cd5b397dfecbd7d91261"
+    },
+    "images/ct-preservation-center.png": {
+      "bytes": 26292,
+      "sha256": "390128528af3e0e2d5730c275a3dd43c8ad5b0c6cb3828dec3e7c55715b06288"
+    },
+    "licenses/LICENSE-R005-original-contributions.txt": {
+      "bytes": 1066,
+      "sha256": "d4b1658a0688e4c2ed8c033cecbf891fc75d137bfd5dc96d7a27ffec19445cc5"
+    },
+    "licenses/LICENSE-R007-original-contributions.txt": {
+      "bytes": 1066,
+      "sha256": "d4b1658a0688e4c2ed8c033cecbf891fc75d137bfd5dc96d7a27ffec19445cc5"
+    },
+    "licenses/LICENSE-R009-original-contributions.txt": {
+      "bytes": 1066,
+      "sha256": "d4b1658a0688e4c2ed8c033cecbf891fc75d137bfd5dc96d7a27ffec19445cc5"
+    },
+    "licenses/LICENSE-villa-root.txt": {
+      "bytes": 1075,
+      "sha256": "87070eec603117b5365e2172999e81b08890aef91c1673383cf9779ee9c89976"
+    },
+    "licenses/LICENSE-volume-cartographer.txt": {
+      "bytes": 35158,
+      "sha256": "7243392431c702199701a29f34e84530f2884a4fe37aba54c0ee2ccd361d052b"
+    },
+    "patches/01-pack-components.patch": {
+      "bytes": 7105,
+      "sha256": "579beabe7377499bf91a654ac0931b786a11314a3a3298bf6d934ca9643926d8"
+    },
+    "patches/02-preserve-grid.patch": {
+      "bytes": 14779,
+      "sha256": "798bbeb57c9c991e7a09a7138bac886848ca7be776210d7733f57a25d54a3c8c"
+    },
+    "patches/03-R009.patch": {
+      "bytes": 13236,
+      "sha256": "02d394c4e68f2a5425a6c8a41c16f4ac2eede44cc3756a211dd31f635e475930"
+    },
+    "patches/04-R007.patch": {
+      "bytes": 2800,
+      "sha256": "4d49ec9578c212285610b0e77a152deaf5c47211e67cc4fe2ba23a34a14c52f6"
+    }
+  }
+}

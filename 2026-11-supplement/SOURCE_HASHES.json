@@ -1,0 +1,97 @@
+{
+  "fixed_commit": "14d4e725df8b569e6fc8ceb3c04d130f705c1565",
+  "patch_order": [
+    {
+      "patch": "patches/01-pack-components.patch",
+      "sha256": "579beabe7377499bf91a654ac0931b786a11314a3a3298bf6d934ca9643926d8",
+      "after": {
+        "volume-cartographer/libs/flatboi/flatboi.cpp": "20cc44404ccce6a04024c73cf65cb7ab5fc3ee9fc3169ff799b1a61899bd06a2"
+      }
+    },
+    {
+      "patch": "patches/02-preserve-grid.patch",
+      "sha256": "798bbeb57c9c991e7a09a7138bac886848ca7be776210d7733f57a25d54a3c8c",
+      "after": {
+        "volume-cartographer/core/include/vc/core/util/SurfaceMeshing.hpp": "8e8b41004bd62159348f3a854dfcb2cdb86fdca30d19af1863719f81aacb2776",
+        "volume-cartographer/core/src/SurfaceMeshing.cpp": "dcc75e14768d321a4eaa7110950396a8a7574bb1fc8e6ad9414ead3113793978",
+        "volume-cartographer/libs/flatboi/flatboi.cpp": "00b682f7956108c75c048e32d96a28cd0bd4f536ad66de47483cf029931bb0ae"
+      }
+    },
+    {
+      "patch": "patches/03-R009.patch",
+      "sha256": "02d394c4e68f2a5425a6c8a41c16f4ac2eede44cc3756a211dd31f635e475930",
+      "after": {
+        "vc_reader/README.md": "b95a79f38f797ae98671aa5a17f7e0abd79aa158bc99f1f938e990f7b870fc0b",
+        "vc_reader/include/vc_reader/zarr_write.hpp": "7e25215511819d5f4feb0dc9bfd4dc2aee4b4f68a3d7b67621a01abe4f2a4eca",
+        "vc_reader/src/cpp/bindings.cpp": "c299f59d4cc2c45bfa9f79c3ae7a4776de81d94286242916d55602641df70629",
+        "vc_reader/src/cpp/zarr/pyramid.cpp": "1d121c03941ab1b20a10d16cce4c3630cd00ebf85ef395ae795b99c779b8c0e6",
+        "vc_reader/src/vc_reader/reader/writer.py": "54743822522dae0be0ef881c0b81c0fc8925b8de24cd52348376d967ea31150d",
+        "vc_reader/tests/test_zarr_writer.py": "4257a0f061f283e025f940ae63a05e7d995855df2f99befb16e2a405cae2dd14",
+        "volume-cartographer/apps/src/vc_render_tifxyz.cpp": "0e9e84092160952819994770061f881268d6a35c944a789676b77abd1b7dfafc"
+      }
+    },
+    {
+      "patch": "patches/04-R007.patch",
+      "sha256": "4d49ec9578c212285610b0e77a152deaf5c47211e67cc4fe2ba23a34a14c52f6",
+      "after": {
+        "volume-cartographer/apps/src/vc_render_tifxyz.cpp": "66d96d1e6cdf858e1ab857116ab3d4567d87ecf9c63e1d06c45a4be955d1f8de"
+      }
+    }
+  ],
+  "files": {
+    "volume-cartographer/libs/flatboi/flatboi.cpp": {
+      "fixed_blob": "2dcf5981008e6b68b8c29ef7e083fc769f40e163",
+      "fixed_sha256": "7dffb8e27f4a3debbb7f530baaa673d0356af03e2e39a6f22355314ee1624ff6",
+      "final_sha256": "00b682f7956108c75c048e32d96a28cd0bd4f536ad66de47483cf029931bb0ae"
+    },
+    "volume-cartographer/core/include/vc/core/util/SurfaceMeshing.hpp": {
+      "fixed_blob": "4c6f3a3c6915985bbe56e30e4993ef9d715ead26",
+      "fixed_sha256": "a32b0045134b4a56737991ec6b7a682efed66fc89b1ae74164e0ed80bef1453c",
+      "final_sha256": "8e8b41004bd62159348f3a854dfcb2cdb86fdca30d19af1863719f81aacb2776"
+    },
+    "volume-cartographer/core/src/SurfaceMeshing.cpp": {
+      "fixed_blob": "8a066104309f320d52f563c578ee81c171c38d51",
+      "fixed_sha256": "761265e6ef324127193e09577acbbdb90c0055df9a974d7c3631f6c5246f2462",
+      "final_sha256": "dcc75e14768d321a4eaa7110950396a8a7574bb1fc8e6ad9414ead3113793978"
+    },
+    "vc_reader/README.md": {
+      "fixed_blob": "e7ee9e1f9637433bd4fca82697a44bc377bfb164",
+      "fixed_sha256": "672c8cae0d6974fc97d3bcf41f748bb76412d472d06dc8bcf2ba74fa867cbad9",
+      "final_sha256": "b95a79f38f797ae98671aa5a17f7e0abd79aa158bc99f1f938e990f7b870fc0b"
+    },
+    "vc_reader/include/vc_reader/zarr_write.hpp": {
+      "fixed_blob": "9b2e88c6189e326673b2bd979b57bbe2cc6c7057",
+      "fixed_sha256": "82b2df9d13eb43ab3c0c5c9b822c56f376af33852178d767ed0e925cce51a19b",
+      "final_sha256": "7e25215511819d5f4feb0dc9bfd4dc2aee4b4f68a3d7b67621a01abe4f2a4eca"
+    },
+    "vc_reader/src/cpp/bindings.cpp": {
+      "fixed_blob": "51d8ae2071f37f3ef2fc5e5d1a7b2664ded47cff",
+      "fixed_sha256": "d80052a3765991518fa884c5996e859f8f098d8bac82d6f8e6d413fb8e3d31e6",
+      "final_sha256": "c299f59d4cc2c45bfa9f79c3ae7a4776de81d94286242916d55602641df70629"
+    },
+    "vc_reader/src/cpp/zarr/pyramid.cpp": {
+      "fixed_blob": "610f457a5207539d910a9d9578399b143b539d06",
+      "fixed_sha256": "cf5d55c99a203edb5b3db9e513b2ce27475b60c7ad48aedb9c7d2a3971710f68",
+      "final_sha256": "1d121c03941ab1b20a10d16cce4c3630cd00ebf85ef395ae795b99c779b8c0e6"
+    },
+    "vc_reader/src/vc_reader/reader/writer.py": {
+      "fixed_blob": "682f4604f0a9bfac6d406bc2efd9e2bddabdde4c",
+      "fixed_sha256": "851197032537b921ea4210251df6bdbf287fb53ef676f4fc961bce0d6eb66a5d",
+      "final_sha256": "54743822522dae0be0ef881c0b81c0fc8925b8de24cd52348376d967ea31150d"
+    },
+    "vc_reader/tests/test_zarr_writer.py": {
+      "fixed_blob": "f07c79f0a2f9669a5b5b9b1ff82d933b5733245b",
+      "fixed_sha256": "c8887667cec14f50e4131da6536b1b7ea6528fd74ae0ed89512fa04cf9efe48f",
+      "final_sha256": "4257a0f061f283e025f940ae63a05e7d995855df2f99befb16e2a405cae2dd14"
+    },
+    "volume-cartographer/apps/src/vc_render_tifxyz.cpp": {
+      "fixed_blob": "3c0d4250ea484c616f4f8e2c260f7ce2a07f99d6",
+      "fixed_sha256": "2d315d553b698943c15fad0021da3b75a5c1d5ebd03c005c1b66f3c16fe52798",
+      "final_sha256": "66d96d1e6cdf858e1ab857116ab3d4567d87ecf9c63e1d06c45a4be955d1f8de"
+    }
+  },
+  "source_records_sha256": {
+    "R160_application": "8edfb73c6fa8c07bbbb3bd75d32369e4dd087e2b370ea4f4dd047f73879bef6b",
+    "R160_independent": "48a799e99e2df22af966acb72fc1103cf682dc90f0c6d475d7b2b2df4fc7bf16"
+  }
+}
